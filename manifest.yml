@@ -1,0 +1,140 @@
+modules:
+  jira:adminPage:
+    - key: hcl-appscan-integration-hello-world-admin-page
+      resource: main
+      resolver:
+        function: resolver
+      render: native
+      title: HCL AppScan Integration
+      icon: resource:app_icon;static/logo.svg
+  webtrigger:
+    - key: my-web-trigger
+      function: mywebtrigger
+    - key: cleanup-trigger
+      function: cleanuptrigger
+    - key: clear-import-trigger
+      function: clearImportTrigger
+  scheduledTrigger:
+    - key: my-scheduled-trigger
+      function: mywebtrigger
+      interval: hour
+    - key: cleanup-scheduled-trigger
+      function: cleanuptrigger
+      interval: hour
+  trigger:
+    - key: issue-update-trigger
+      function: issueupdate
+      events:
+        - avi:jira:updated:issue
+      filter:
+        ignoreSelf: true          
+  consumer:
+    - key: import-queue-consumer
+      queue: import-queue
+      resolver:
+        function: import-queue-resolver
+        method: import-queue-consumer
+    - key: app-queue-consumer
+      queue: app-queue
+      resolver:
+        function: app-queue-resolver
+        method: app-queue-consumer
+    - key: history-queue-consumer
+      queue: history-queue
+      resolver:
+        function: history-queue-resolver
+        method: history-queue-consumer
+    - key: timer-queue-consumer
+      queue: timer-queue
+      resolver:
+        function: timer-queue-resolver
+        method: timer-queue-consumer
+  function:
+    - key: resolver
+      handler: index.handler
+    - key: import-queue-resolver
+      handler: index.importQueueHandler
+    - key: app-queue-resolver
+      handler: index.appQueueHandler
+    - key: history-queue-resolver
+      handler: index.historyQueueHandler
+    - key: timer-queue-resolver
+      handler: index.timerQueueHandler
+    - key: mywebtrigger
+      handler: index.trigger
+    - key: cleanuptrigger
+      handler: index.cleanupTrigger
+    - key: clearImportTrigger
+      handler: index.clearImportTrigger
+    - key: issueupdate
+      handler: index.issueUpdateTrigger
+
+resources:
+  - key: main
+    path: src/frontend/index.jsx
+  - key: app_icon
+    path: src/frontend/
+app:
+  id: ari:cloud:ecosystem::app/77442a9d-b356-4145-9c3f-cd262ca368ef
+  runtime:
+    snapshots: false
+    name: nodejs18.x
+  storage:
+    entities:
+      - name: import-details
+        attributes:
+          importId: 
+            type: string
+          applicationId: 
+            type: string
+          issueId: 
+            type: string
+          dateTime: 
+            type: string
+          importType:
+            type: string
+          status: 
+            type: boolean
+          details:
+            type: string
+          batchId:
+            type: integer
+        indexes:
+          - importId
+          - applicationId
+          - dateTime
+          - name: by-importId-per-batchid
+            partition: 
+              - importId
+            range: 
+              - batchId
+      - name: import-history
+        attributes:
+          importId: 
+            type: string
+          dateTime: 
+            type: string
+          importType:
+            type: string
+          issueCount:
+            type: integer
+          successCount:
+            type: integer
+          failureCount:
+            type: integer
+          status: 
+            type: boolean
+        indexes:
+          - importId
+          - dateTime
+permissions:
+  scopes:
+    - storage:app
+    - read:jira-work
+    - write:jira-work
+  external:
+    fetch:
+      backend:
+        - https://*.appscan.com
+      
+        
