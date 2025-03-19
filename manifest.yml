@@ -75,7 +75,7 @@ resources:
   - key: app_icon
     path: src/frontend/
 app:
-  id: ari:cloud:ecosystem::app/77442a9d-b356-4145-9c3f-cd262ca368ef
+  id: ari:cloud:ecosystem::app/
   runtime:
     snapshots: false
     name: nodejs18.x
