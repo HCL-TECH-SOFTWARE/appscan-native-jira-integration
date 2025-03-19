@@ -1,0 +1,408 @@
+---------------------
+Notices & Information
+---------------------
+------------------------------
+HCL AppScan Jira Plugin v1.2.0
+------------------------------
+
+======
+DETAIL
+======
+Note: generic licenses are marked with (*)
+Note: missing copyright references are marked with (*)
+***************************************************
+1. Library: @forge/util-1.4.2 Product: AppScan Jira
+***************************************************
+========
+LICENSES
+========
+Licensed under Unlicense
+License terms can be found at: https://www.npmjs.com/package/@forge/util
+
+License Text Under Appendix
+
+
+
+==========
+COPYRIGHTS
+==========
+(*) The copyright for this library is unknown
+
+***********************************************
+2. Library: api-3.2.0.tgz Product: AppScan Jira
+***********************************************
+========
+LICENSES
+========
+Licensed under Unlicense
+License terms can be found at: https://www.npmjs.com/package/@forge/api
+
+License Text Under Appendix
+
+
+
+==========
+COPYRIGHTS
+==========
+(*) The copyright for this library is unknown
+
+**************************************************
+3. Library: bridge-3.3.0.tgz Product: AppScan Jira
+**************************************************
+========
+LICENSES
+========
+Licensed under Unlicense
+License terms can be found at: https://www.npmjs.com/package/@forge/bridge
+
+License Text Under Appendix
+
+
+
+==========
+COPYRIGHTS
+==========
+(*) The copyright for this library is unknown
+
+************************************************
+4. Library: core-js-2.6.12 Product: AppScan Jira
+************************************************
+========
+LICENSES
+========
+Licensed under MIT
+License terms can be found at: Cannot be established
+
+License Text Under Appendix
+
+
+
+==========
+COPYRIGHTS
+==========
+--------------------
+Copyright 1 out of 2
+--------------------
+Copyrighted under Copyright 2014-2020 Denis Pushkarev
+Copyright terms can be found at: https://index.whitesourcesoftware.com/gri/app/reader/resource/content/asString/91057bd6-3fc9-4d23-ad08-58959564f4ba
+
+
+--------------------
+Copyright 2 out of 2
+--------------------
+Copyrighted under Copyright 2014-2020 Denis Pushkarev
+Copyright terms can be found at: https://github.com/zloirock/core-js/blob/v2.6.12/LICENSE
+
+
+***************************************************
+5. Library: events-0.8.30.tgz Product: AppScan Jira
+***************************************************
+========
+LICENSES
+========
+Licensed under Unlicense
+License terms can be found at: https://www.npmjs.com/package/@forge/events
+
+License Text Under Appendix
+
+
+
+==========
+COPYRIGHTS
+==========
+(*) The copyright for this library is unknown
+
+***********************************************
+6. Library: flatted-3.2.7 Product: AppScan Jira
+***********************************************
+========
+LICENSES
+========
+Licensed under ISC
+License terms can be found at: https://www.npmjs.com/package/flatted
+
+License Text Under Appendix
+
+
+
+==========
+COPYRIGHTS
+==========
+--------------------
+Copyright 1 out of 2
+--------------------
+Copyrighted under Copyright 2018-2020 Andrea Giammarchi
+Copyright terms can be found at: https://index.whitesourcesoftware.com/gri/app/reader/resource/content/asString/71e3ca20-83df-46ac-8a69-557ae43f7ea7
+
+
+--------------------
+Copyright 2 out of 2
+--------------------
+Copyrighted under Copyright 2018-2020 Andrea Giammarchi
+Copyright terms can be found at: https://index.whitesourcesoftware.com/gri/app/reader/resource/content/asString/644caabd-676f-479e-8cfe-4d6bf0e2b9ef
+
+
+**************************************************
+7. Library: react-10.1.0.tgz Product: AppScan Jira
+**************************************************
+========
+LICENSES
+========
+Licensed under Unlicense
+License terms can be found at: https://www.npmjs.com/package/@forge/react
+
+License Text Under Appendix
+
+
+
+==========
+COPYRIGHTS
+==========
+(*) The copyright for this library is unknown
+
+**************************************************
+8. Library: react-18.2.0.tgz Product: AppScan Jira
+**************************************************
+========
+LICENSES
+========
+Licensed under MIT
+License terms can be found at: https://index.whitesourcesoftware.com/gri/app/reader/resource/content/asString/afe5ea7e-f751-4d5d-bb51-7dd5c6fedc43
+
+License Text Under Appendix
+
+
+
+==========
+COPYRIGHTS
+==========
+Copyrighted under Copyright Facebook, Inc. and its affiliates
+Copyright terms can be found at: https://index.whitesourcesoftware.com/gri/app/reader/resource/content/asString/afe5ea7e-f751-4d5d-bb51-7dd5c6fedc43
+
+
+
+
+************************************************************
+9. Library: react-beautiful-dnd-12.2.0 Product: AppScan Jira
+************************************************************
+========
+LICENSES
+========
+Licensed under Apache 2.0
+License terms can be found at: Cannot be established
+
+License Text Under Appendix
+
+
+
+==========
+COPYRIGHTS
+==========
+--------------------
+Copyright 1 out of 2
+--------------------
+Copyrighted under Copyright 2019 Atlassian Pty Ltd
+Copyright terms can be found at: https://index.whitesourcesoftware.com/gri/app/reader/resource/content/asString/d83a3aad-9277-40a2-b3fa-b53e7d8bccfb
+
+
+--------------------
+Copyright 2 out of 2
+--------------------
+Copyrighted under Copyright 2019 Atlassian Pty Ltd
+Copyright terms can be found at: https://github.com/atlassian/react-beautiful-dnd/blob/v12.2.0-alpha.1/LICENSE
+
+
+*********************************************************
+10. Library: react-helmet-6.1.0.tgz Product: AppScan Jira
+*********************************************************
+========
+LICENSES
+========
+Licensed under MIT
+License terms can be found at: https://index.whitesourcesoftware.com/gri/app/reader/resource/content/asString/304b744d-b926-4c63-948d-c3fbd319a832
+
+License Text Under Appendix
+
+
+
+==========
+COPYRIGHTS
+==========
+Copyrighted under Copyright 2015 NFL
+Copyright terms can be found at: https://github.com/nfl/react-helmet/blob/6.1.0/LICENSE
+
+
+
+
+******************************************************
+11. Library: resolver-1.5.28.tgz Product: AppScan Jira
+******************************************************
+========
+LICENSES
+========
+Licensed under Unlicense
+License terms can be found at: https://www.npmjs.com/package/@forge/resolver
+
+License Text Under Appendix
+
+
+
+==========
+COPYRIGHTS
+==========
+(*) The copyright for this library is unknown
+
+*************************************************
+12. Library: tslib-2.6.1.js Product: AppScan Jira
+*************************************************
+========
+LICENSES
+========
+Licensed under Apache 2.0
+License terms can be found at: https://github.com/cdnjs/cdnjs/blob/master/ajax/libs/tslib/package.json
+
+License Text Under Appendix
+
+
+
+==========
+COPYRIGHTS
+==========
+Copyrighted under Copyright Microsoft Corporation
+Copyright terms can be found at: https://index.whitesourcesoftware.com/gri/app/reader/resource/content/asString/47e10c88-00be-4bf9-ac2a-550e931e8f1c
+
+
+
+
+*****************************************************
+13. Library: tslib.es6-2.6.1.js Product: AppScan Jira
+*****************************************************
+========
+LICENSES
+========
+Licensed under Apache 2.0
+License terms can be found at: https://github.com/cdnjs/cdnjs/blob/master/ajax/libs/tslib/package.json
+
+License Text Under Appendix
+
+
+
+==========
+COPYRIGHTS
+==========
+Copyrighted under Copyright Microsoft Corporation
+Copyright terms can be found at: https://index.whitesourcesoftware.com/gri/app/reader/resource/content/asString/6fa803e5-7067-4e89-893b-3ae7567beb02
+
+
+
+
+*************************************************
+14. Library: uuid-9.0.1.tgz Product: AppScan Jira
+*************************************************
+========
+LICENSES
+========
+Licensed under MIT
+License terms can be found at: https://index.whitesourcesoftware.com/gri/app/reader/resource/content/asString/f3d03dd5-f059-433a-b84e-0afd6d584609
+
+License Text Under Appendix
+
+
+
+==========
+COPYRIGHTS
+==========
+Copyrighted under Copyright 2010-2020 Robert Kieffer and other contributors
+Copyright terms can be found at: https://index.whitesourcesoftware.com/gri/app/reader/resource/content/asString/f3d03dd5-f059-433a-b84e-0afd6d584609
+
+
+
+
+=========================
+APPENDIX: License Details
+=========================
+
+***
+ISC
+***
+License Text:
+(*) ISC License:
+
+Copyright (c) 2004-2010 by Internet Systems Consortium, Inc. ("ISC")
+Copyright (c) 1995-2003 by Internet Software Consortium
+
+Permission to use, copy, modify, and/or distribute this software for any purpose with or without fee is hereby granted, provided that the above copyright notice and this permission notice appear in all copies.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND ISC DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL ISC BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+
+
+
+*********
+Unlicense
+*********
+License Text:
+(*) This is free and unencumbered software released into the public domain.
+
+Anyone is free to copy, modify, publish, use, compile, sell, or distribute this software, either in source code form or as a compiled binary, for any purpose, commercial or non-commercial, and by any means.
+
+In jurisdictions that recognize copyright laws, the author or authors of this software dedicate any and all copyright interest in the software to the public domain. We make this dedication for the benefit of the public at large and to the detriment of our heirs and
+successors. We intend this dedication to be an overt act of relinquishment in perpetuity of all present and future rights to this software under copyright law.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+For more information, please refer to <http://unlicense.org/>
+
+
+
+
+**********
+Apache 2.0
+**********
+License Text:
+Copyright 2019 Atlassian Pty Ltd
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+
+
+
+***
+MIT
+***
+License Text:
+MIT License
+
+Copyright (c) Facebook, Inc. and its affiliates.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+
+
+
