@@ -1,7 +1,7 @@
 # Setting up and Deploying the HCL AppScan Integration for Jira Cloud Plugin
 
 This document shows how  to set up, configure, and deploy the open-source HCL AppScan Integration for Jira Cloud plugin. This plugin integrates with AppScan 360° running on a local network, using Ngrok to expose the backend to Jira Cloud.
-Ngrok has been employed for tunneling in this implementation; however, the system's architecture is vendor-agnostic. You're not limited to one tunneling service. You can choose from many options, depending on your requirements, budget, and existing systems. If your AppScan 360° Server is already publicly accessible via a domain name, proceed directly past step 5, as tunneling is not required. Tunneling is only necessary when the server is behind a firewall or NAT and not directly reachable from the internet.
+Ngrok is used for tunneling in this implementation, but the system's architecture is vendor-neutral. You have the flexibility to choose from various tunneling services based on your needs, budget, and existing infrastructure. Tunneling is only required when the server is behind a firewall or NAT and not directly accessible from the internet. If your AppScan 360° Server is already accessible via a domain name,you can proceed directly past step 5, as tunneling isn't needed.
 
 # Prerequisites: 
 
