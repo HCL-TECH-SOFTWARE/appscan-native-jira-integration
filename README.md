@@ -1,6 +1,7 @@
 # Setting up and Deploying the HCL AppScan Integration for Jira Cloud Plugin
 
 This document shows how  to set up, configure, and deploy the open-source HCL AppScan Integration for Jira Cloud plugin. This plugin integrates with AppScan 360° running on a local network, using Ngrok to expose the backend to Jira Cloud.
+Ngrok has been employed for tunneling in this implementation; however, the system's architecture is vendor-agnostic. You're not limited to one tunneling service. You can choose from many options, depending on your requirements, budget, and existing systems. If your AppScan 360° Server is already publicly accessible via a domain name, proceed directly past step 5, as tunneling is not required. Tunneling is only necessary when the server is behind a firewall or NAT and not directly reachable from the internet.
 
 # Prerequisites: 
 
@@ -72,7 +73,7 @@ The Forge CLI generates an app id in the manifest.yml file. Be sure to **note th
    2. Install Ngrok on the server where AppScan 360° is running.
 
    To install Ngrok via Apt, use the following command:
-
+```
       curl \-sSL https://ngrok-agent.s3.amazonaws.com/ngrok.asc \\
 
    	| sudo tee /etc/apt/trusted.gpg.d/ngrok.asc \>/dev/null \\
@@ -84,7 +85,7 @@ The Forge CLI generates an app id in the manifest.yml file. Be sure to **note th
    	&& sudo apt update \\
 
    	&& sudo apt install ngrok
-
+```
    
 
    Note: Ngrok’s free tier has limitations (such as limited bandwidth and connections). For production environments, it’s recommended to use a paid Ngrok plan or set up a reverse proxy for more stable connections.
@@ -95,9 +96,9 @@ The Forge CLI generates an app id in the manifest.yml file. Be sure to **note th
 
 3. Add your Ngrok Authtoken:  
    Run the following command to add your authtoken to the default ngrok.yml [configuration file](https://ngrok.com/docs/agent/config/):  
-     
+   ```  
    ngrok config add-authtoken \<your\_auth\_token\>  
-     
+   ```  
      
 4. **Create a Domain (optional):**  
      
@@ -117,10 +118,10 @@ The Forge CLI generates an app id in the manifest.yml file. Be sure to **note th
       - Find the IP address corresponding to ascp-mr-user-api  
       - Execute the below command:  
         
-
-   nohup ngrok http \<ip address\>:\<port\> \--url \<endpoint\> \> ngrok.log 2\>&1 & 
-
-        nohup allows a process to continue running even after you log out or close the terminal.  
+```
+   nohup ngrok http <ip address>:<port> --url <endpoint> > ngrok.log 2>&1 & 
+```
+  nohup allows a process to continue running even after you log out or close the terminal.  
      
    b. Copy the URL provided by Ngrok, as it will be your backend URL.  
      
@@ -129,36 +130,34 @@ The Forge CLI generates an app id in the manifest.yml file. Be sure to **note th
    1. Fork the plugin's repository on GitHub ([https://github.com/HCL-TECH-SOFTWARE/appscan-native-jira-integration](https://github.com/HCL-TECH-SOFTWARE/appscan-native-jira-integration))  to your account.
 
    2. Clone the forked repository to your local machine:
-
+```
    git clone https://github.com/\<your-username\>/\<repository-name\>.git
 
    cd \<repository-name\>
-
+```
 7. **Configure the Plugin:**  
    1. Open the manifest.yml file in the plugin's root directory.  
    2. Replace the placeholder backend-url with the Ngrok URL you copied in step 6\. Also , update the app id you generated in step 1 in the manifest file.  For example:
 
-   YAML
+  ```yaml
+	external:
+	  fetch:
+	    backend:
+	      - https://*.appscan.com
+	      - <backend-url>
+ ```
+```yaml
+  app:  
+    id: \<your-app-id\> \# Make sure the app id is correct.
+```
 
-   modules:
-
-     permissions:
-
-         external:  
-    	   fetch:  
-            backend:  
-        	\- https://\*.appscan.com  
-        	\- \< backend-url \>  
-	app:  
-  id: \<your-app-id\> \# Make sure the app id is correct.
-
-8. **Install Plugin Dependencies:**
+9. **Install Plugin Dependencies:**
 
    1. Navigate to the plugin's root directory in your terminal and install the required dependencies:
-
-   npm install  \# or yarn install
-
-9. **Build and Deploy the Plugin:**
+   ```
+   npm install  
+   ```
+10. **Build and Deploy the Plugin:**
 
    1. Navigate to the app's top-level directory and deploy your app by running:
 
@@ -174,7 +173,7 @@ The Forge CLI generates an app id in the manifest.yml file. Be sure to **note th
 
    5. Once the successful installation message appears, your app is installed and ready to use on the specified site. You can always delete your app from the site by running the forge uninstall command.
 
-10. **Test the Plugin:**
+11. **Test the Plugin:**
 
     Navigate to the app using App → Manage your apps. Use the app in Jira to verify that it's working correctly and communicating with your AppScan 360° instance via Ngrok.
 
