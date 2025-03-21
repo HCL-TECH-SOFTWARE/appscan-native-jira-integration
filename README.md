@@ -74,19 +74,15 @@ The Forge CLI generates an app id in the manifest.yml file. Be sure to **note th
 
    To install Ngrok via Apt, use the following command:
 ```
-      curl \-sSL https://ngrok-agent.s3.amazonaws.com/ngrok.asc \\
+      curl -sSL https://ngrok-agent.s3.amazonaws.com/ngrok.asc \
+  | sudo tee /etc/apt/trusted.gpg.d/ngrok.asc >/dev/null \
+  && echo "deb https://ngrok-agent.s3.amazonaws.com buster main" \
+  | sudo tee /etc/apt/sources.list.d/ngrok.list \
+  && sudo apt update \
+  && sudo apt install ngrok
 
-   	| sudo tee /etc/apt/trusted.gpg.d/ngrok.asc \>/dev/null \\
-
-   	&& echo "deb https://ngrok-agent.s3.amazonaws.com buster main" \\
-
-   	| sudo tee /etc/apt/sources.list.d/ngrok.list \\
-
-   	&& sudo apt update \\
-
-   	&& sudo apt install ngrok
 ```
-   
+   Refer to this link for other OS - [Download Ngrok](https://ngrok.com/downloads).
 
    Note: Ngrok’s free tier has limitations (such as limited bandwidth and connections). For production environments, it’s recommended to use a paid Ngrok plan or set up a reverse proxy for more stable connections.
 
@@ -97,7 +93,7 @@ The Forge CLI generates an app id in the manifest.yml file. Be sure to **note th
 3. Add your Ngrok Authtoken:  
    Run the following command to add your authtoken to the default ngrok.yml [configuration file](https://ngrok.com/docs/agent/config/):  
    ```  
-   ngrok config add-authtoken \<your\_auth\_token\>  
+   ngrok config add-authtoken <your_auth_token>  
    ```  
      
 4. **Create a Domain (optional):**  
@@ -131,9 +127,9 @@ The Forge CLI generates an app id in the manifest.yml file. Be sure to **note th
 
    2. Clone the forked repository to your local machine:
 ```
-   git clone https://github.com/\<your-username\>/\<repository-name\>.git
+   git clone https://github.com/<your-username>/<repository-name>.git
 
-   cd \<repository-name\>
+   cd <repository-name>
 ```
 7. **Configure the Plugin:**  
    1. Open the manifest.yml file in the plugin's root directory.  
@@ -148,7 +144,7 @@ The Forge CLI generates an app id in the manifest.yml file. Be sure to **note th
  ```
 ```yaml
   app:  
-    id: \<your-app-id\> \# Make sure the app id is correct.
+    id: <your-app-id> \# Make sure the app id is correct.
 ```
 
 9. **Install Plugin Dependencies:**
