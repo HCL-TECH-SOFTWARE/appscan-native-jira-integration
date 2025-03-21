@@ -3,7 +3,7 @@ Release Summary
 1.2.0 (March, 2025)
 ------
 * Added support for importing issues from AppScan 360°.
-* Improved policy selection by replacing the text input with a multi-select dropdown.
+* Added support for multiple policy selection.
 * Added support for custom jira priorities.
 * Bug fixes
 ------
