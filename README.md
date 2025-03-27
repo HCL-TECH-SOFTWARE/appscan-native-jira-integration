@@ -1,6 +1,6 @@
 # Setting up and Deploying the HCL AppScan Integration 360° for Jira Cloud Plugin
 
-This document shows how  to set up, configure, and deploy the open-source HCL AppScan 360° Integration for Jira Cloud plugin. This plugin integrates with AppScan 360° running on a local network, using Ngrok to expose the backend to Jira Cloud.
+This document shows how  to set up, configure, and deploy the open-source HCL AppScan 360° (version 1.5 and later). Integration for Jira Cloud plugin. This plugin integrates with AppScan 360° running on a local network, using Ngrok to expose the backend to Jira Cloud.
 Ngrok is used for tunneling in this implementation, but the system's architecture is vendor-neutral. You have the flexibility to choose from various tunneling services based on your needs, budget, and existing infrastructure. Tunneling is only required when the server is behind a firewall or NAT and not directly accessible from the internet. If your AppScan 360° Server is already accessible via a domain name,you can proceed directly past step 5, as tunneling isn't needed.
 
 # Prerequisites: 
@@ -15,7 +15,7 @@ Before you begin, ensure you have the following:
   * npm install \-g @forge/cli  
     The Forge CLI is the command-line interface for developing Forge apps, which allows you to create, build, and deploy Jira apps.
 
-* A server with AppScan 360° installed.
+* A server with AppScan 360° (version 1.5 and later) installed.
 
 * A GitHub account.
 
