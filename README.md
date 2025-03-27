@@ -9,7 +9,7 @@ Before you begin, ensure you have the following:
 
 * A Jira Cloud instance with administrative privileges.
 
-* Node.js version v20.8.1 or later, and npm (or yarn) are installed.
+* Node.js version v22.14.0 or later, and npm (or yarn) are installed.
 
 * The Forge CLI installed:  
   * npm install \-g @forge/cli  
