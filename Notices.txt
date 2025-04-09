@@ -1,71 +1,17 @@
 ---------------------
 Notices & Information
 ---------------------
-------------------------------
-HCL AppScan Jira Plugin v1.2.0
-------------------------------
+----------------------------------------------------
+HCL AppScan Jira Plugin v1.2.0 Notices & Information
+----------------------------------------------------
 
 ======
 DETAIL
 ======
 Note: generic licenses are marked with (*)
 Note: missing copyright references are marked with (*)
-***************************************************
-1. Library: @forge/util-1.4.2 Product: AppScan Jira
-***************************************************
-========
-LICENSES
-========
-Licensed under Unlicense
-License terms can be found at: https://www.npmjs.com/package/@forge/util
-
-License Text Under Appendix
-
-
-
-==========
-COPYRIGHTS
-==========
-(*) The copyright for this library is unknown
-
-***********************************************
-2. Library: api-3.2.0.tgz Product: AppScan Jira
-***********************************************
-========
-LICENSES
-========
-Licensed under Unlicense
-License terms can be found at: https://www.npmjs.com/package/@forge/api
-
-License Text Under Appendix
-
-
-
-==========
-COPYRIGHTS
-==========
-(*) The copyright for this library is unknown
-
-**************************************************
-3. Library: bridge-3.3.0.tgz Product: AppScan Jira
-**************************************************
-========
-LICENSES
-========
-Licensed under Unlicense
-License terms can be found at: https://www.npmjs.com/package/@forge/bridge
-
-License Text Under Appendix
-
-
-
-==========
-COPYRIGHTS
-==========
-(*) The copyright for this library is unknown
-
 ************************************************
-4. Library: core-js-2.6.12 Product: AppScan Jira
+1. Library: core-js-2.6.12 Product: AppScan Jira
 ************************************************
 ========
 LICENSES
@@ -94,26 +40,8 @@ Copyrighted under Copyright 2014-2020 Denis Pushkarev
 Copyright terms can be found at: https://github.com/zloirock/core-js/blob/v2.6.12/LICENSE
 
 
-***************************************************
-5. Library: events-0.8.30.tgz Product: AppScan Jira
-***************************************************
-========
-LICENSES
-========
-Licensed under Unlicense
-License terms can be found at: https://www.npmjs.com/package/@forge/events
-
-License Text Under Appendix
-
-
-
-==========
-COPYRIGHTS
-==========
-(*) The copyright for this library is unknown
-
 ***********************************************
-6. Library: flatted-3.2.7 Product: AppScan Jira
+2. Library: flatted-3.2.7 Product: AppScan Jira
 ***********************************************
 ========
 LICENSES
@@ -143,25 +71,7 @@ Copyright terms can be found at: https://index.whitesourcesoftware.com/gri/app/r
 
 
 **************************************************
-7. Library: react-10.1.0.tgz Product: AppScan Jira
-**************************************************
-========
-LICENSES
-========
-Licensed under Unlicense
-License terms can be found at: https://www.npmjs.com/package/@forge/react
-
-License Text Under Appendix
-
-
-
-==========
-COPYRIGHTS
-==========
-(*) The copyright for this library is unknown
-
-**************************************************
-8. Library: react-18.2.0.tgz Product: AppScan Jira
+3. Library: react-18.2.0.tgz Product: AppScan Jira
 **************************************************
 ========
 LICENSES
@@ -183,7 +93,7 @@ Copyright terms can be found at: https://index.whitesourcesoftware.com/gri/app/r
 
 
 ************************************************************
-9. Library: react-beautiful-dnd-12.2.0 Product: AppScan Jira
+4. Library: react-beautiful-dnd-12.2.0 Product: AppScan Jira
 ************************************************************
 ========
 LICENSES
@@ -212,9 +122,9 @@ Copyrighted under Copyright 2019 Atlassian Pty Ltd
 Copyright terms can be found at: https://github.com/atlassian/react-beautiful-dnd/blob/v12.2.0-alpha.1/LICENSE
 
 
-*********************************************************
-10. Library: react-helmet-6.1.0.tgz Product: AppScan Jira
-*********************************************************
+********************************************************
+5. Library: react-helmet-6.1.0.tgz Product: AppScan Jira
+********************************************************
 ========
 LICENSES
 ========
@@ -234,71 +144,9 @@ Copyright terms can be found at: https://github.com/nfl/react-helmet/blob/6.1.0/
 
 
 
-******************************************************
-11. Library: resolver-1.5.28.tgz Product: AppScan Jira
-******************************************************
-========
-LICENSES
-========
-Licensed under Unlicense
-License terms can be found at: https://www.npmjs.com/package/@forge/resolver
-
-License Text Under Appendix
-
-
-
-==========
-COPYRIGHTS
-==========
-(*) The copyright for this library is unknown
-
-*************************************************
-12. Library: tslib-2.6.1.js Product: AppScan Jira
-*************************************************
-========
-LICENSES
-========
-Licensed under Apache 2.0
-License terms can be found at: https://github.com/cdnjs/cdnjs/blob/master/ajax/libs/tslib/package.json
-
-License Text Under Appendix
-
-
-
-==========
-COPYRIGHTS
-==========
-Copyrighted under Copyright Microsoft Corporation
-Copyright terms can be found at: https://index.whitesourcesoftware.com/gri/app/reader/resource/content/asString/47e10c88-00be-4bf9-ac2a-550e931e8f1c
-
-
-
-
-*****************************************************
-13. Library: tslib.es6-2.6.1.js Product: AppScan Jira
-*****************************************************
-========
-LICENSES
-========
-Licensed under Apache 2.0
-License terms can be found at: https://github.com/cdnjs/cdnjs/blob/master/ajax/libs/tslib/package.json
-
-License Text Under Appendix
-
-
-
-==========
-COPYRIGHTS
-==========
-Copyrighted under Copyright Microsoft Corporation
-Copyright terms can be found at: https://index.whitesourcesoftware.com/gri/app/reader/resource/content/asString/6fa803e5-7067-4e89-893b-3ae7567beb02
-
-
-
-
-*************************************************
-14. Library: uuid-9.0.1.tgz Product: AppScan Jira
-*************************************************
+************************************************
+6. Library: uuid-9.0.1.tgz Product: AppScan Jira
+************************************************
 ========
 LICENSES
 ========
@@ -334,24 +182,6 @@ Copyright (c) 1995-2003 by Internet Software Consortium
 Permission to use, copy, modify, and/or distribute this software for any purpose with or without fee is hereby granted, provided that the above copyright notice and this permission notice appear in all copies.
 
 THE SOFTWARE IS PROVIDED "AS IS" AND ISC DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL ISC BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
-
-
-
-
-*********
-Unlicense
-*********
-License Text:
-(*) This is free and unencumbered software released into the public domain.
-
-Anyone is free to copy, modify, publish, use, compile, sell, or distribute this software, either in source code form or as a compiled binary, for any purpose, commercial or non-commercial, and by any means.
-
-In jurisdictions that recognize copyright laws, the author or authors of this software dedicate any and all copyright interest in the software to the public domain. We make this dedication for the benefit of the public at large and to the detriment of our heirs and
-successors. We intend this dedication to be an overt act of relinquishment in perpetuity of all present and future rights to this software under copyright law.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-For more information, please refer to <http://unlicense.org/>
 
 
 
