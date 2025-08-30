@@ -77,8 +77,7 @@ resources:
 app:
   id: ari:cloud:ecosystem::app/
   runtime:
-    snapshots: false
-    name: nodejs18.x
+    name: nodejs22.x
   storage:
     entities:
       - name: import-details
