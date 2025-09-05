@@ -114,6 +114,16 @@ resolver.define('storage', async (req) => {
 
 });
 
+resolver.define('cancelImport', async () => {
+  try {
+    await storage.set('importStatus', { isInProgress: false });
+    return { success: true, message: 'Import status has been reset.' };
+  } catch (error) {
+    console.error('Error resetting import status:', error);
+    return { success: false, message: 'Failed to reset import status.' };
+  }
+});
+
 resolver.define('secretStorage', async (req) => {
 
   if (req.payload.type == 'GET') {
