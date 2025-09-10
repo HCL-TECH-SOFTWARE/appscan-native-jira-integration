@@ -365,7 +365,7 @@ const OneTimeImport = ({ isCredsExpired }) => {
                                     )}
                                 </>
                                 <>
-                                    {isWarning && (
+                                    {isWarning && !isCancelled && (
                                         <SectionMessage title="No issues found" appearance="information">
                                         </SectionMessage>
                                     )}
