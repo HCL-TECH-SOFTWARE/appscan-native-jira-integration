@@ -1,5 +1,10 @@
 Release Summary
 =========
+1.2.1 (Sep, 2025)
+------
+* Added cancel import functionality for one time imports.
+* Upgraded Nodejs runtime to 22.x
+------
 1.2.0 (March, 2025)
 ------
 * Added support for importing issues from AppScan 360°.
