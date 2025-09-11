@@ -24,6 +24,7 @@ import {
     RequiredAsterisk,
     Textfield,
     Button,
+    ButtonGroup,
     Box,
     Stack,
     Label,
@@ -55,7 +56,7 @@ const OneTimeImport = ({ isCredsExpired }) => {
     const [currentIssueCount, setCurrentIssuecount] = useState(0);
     const [appCount, setAppCount] = useState(0);
     const [importTime, setImportTime] = useState();
-
+    const [isCancelled, setIsCancelled] = useState(false);
     const { handleSubmit, register, getFieldId, formState } = useForm();
     const { errors, isSubmitting } = formState;
 
@@ -77,6 +78,7 @@ const OneTimeImport = ({ isCredsExpired }) => {
     }, [])
 
     const handleOneTimeImportSubmit = async (oneTimeImportConfig) => {
+        setIsCancelled(false);
         setOpen(false);
         setError(false);
         setIsWarning(false);
@@ -264,11 +266,23 @@ const OneTimeImport = ({ isCredsExpired }) => {
             setOpen(true);
         }
         else {
-            setIsWarning(true);
+            if(!isCancelled){
+                setIsWarning(true);
+            }
         }
 
     }
+    const handleCancelImport = async () => {
+        setIsCancelled(true);
+        const response = await invoke('cancelImport');
+        setIsImportRunning(false);
+        setImportTime(null);
+        setIsImportProgress(false);
+        setOpen(false);
+        setError(false);
+        setIsWarning(false);
 
+    };
 
     const handleMaxIssuesChange = (e) => {
         setDefaultMaxIssues(e.target.value);
@@ -351,7 +365,7 @@ const OneTimeImport = ({ isCredsExpired }) => {
                                     )}
                                 </>
                                 <>
-                                    {isWarning && (
+                                    {isWarning && !isCancelled && (
                                         <SectionMessage title="No issues found" appearance="information">
                                         </SectionMessage>
                                     )}
@@ -360,9 +374,14 @@ const OneTimeImport = ({ isCredsExpired }) => {
 
                         </FormSection>
                         <FormFooter align='start'>
+                        <ButtonGroup>
                             <Button appearance="primary" isDisabled={isSubmitting || isImportRunning} type="submit">
                                 Import now {isSubmitting || isImportRunning ? <Spinner appearance='inherit' size={'medium'} /> : ''}
                             </Button>
+                            <Button appearance="danger" onClick={handleCancelImport}>
+                              Cancel import
+                            </Button>
+                        </ButtonGroup>
                         </FormFooter>
                     </Form >
                 }
