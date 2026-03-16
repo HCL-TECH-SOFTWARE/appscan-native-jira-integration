@@ -77,26 +77,15 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
 
     const [showLoader, setShowLoader] = useState(true);
     const [issueTypeLoading, setIssueTypeLoading] = useState(false);
-    const [statusesLoading, setStatusesLoading] = useState(false);
-    const [resolutionsLoading, setResolutionsLoading] = useState(false);
 
     const { configStorage, setConfigStorage } = useAppContext();
     const [isChecked, setIsChecked] = useState(false);
-    const [isManual, setIsManual] = useState(false);
 
     const [isOpen, setIsOpen] = useState(false);
     const openModal = () => setIsOpen(true);
     const closeModal = () => setIsOpen(false);
     const disableBidirectional = () => { setIsOpen(false); setIsChecked(false); }
     const [jiraPriority, setJiraPriority] = useState([]);
-    const [jiraStatus, setJiraStatuses] = useState([]);
-    const [jiraResolution, setJiraResolutions] = useState([]);
-    const [selectedJiraFixedStatus, setSelectedJiraFixedStatus] = useState();
-    const [selectedJiraFixedResolution, setSelectedJiraFixedResolution] = useState();
-    const [selectedJiraNoiseStatus, setSelectedJiraNoiseStatus] = useState();
-    const [selectedJiraNoiseResolution, setSelectedJiraNoiseResolution] = useState();
-    const [selectedJiraInProgressStatus, setSelectedJiraInProgressStatus] = useState();
-    const [selectedJiraReopenedStatus, setSelectedJiraReopenedStatus] = useState();
     const [selectedSeverityCritical, setSelectedSeverityCritical] = useState();
     const [selectedSeverityHigh, setSelectedSeverityHigh] = useState();
     const [selectedSeverityMedium, setSelectedSeverityMedium] = useState();
@@ -144,24 +133,6 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
             }
             ));
             setAppscanpolicies(policyOptionsdata);
-
-            const resolutionsData = await fetchResolutions();
-
-            const resolutionOptionsData = resolutionsData.values.map((resolutions) => ({
-                label: resolutions.name,
-                value: resolutions.name
-            }
-            ));
-            const resolutionOptionsList = [
-                {
-                    label: "N/A",
-                    value: ""
-                },
-                ...resolutionOptionsData
-            ]
-
-            setJiraResolutions(resolutionOptionsList);
-
             await updateImportConfiguration(applicationOptionsdata,priorityOptionsData);
             setShowLoader(false);
         }
@@ -188,25 +159,6 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
         fetchIssueTypesByProject();
     }, [selectedProject])
 
-    useEffect(() => {
-        const fetchStatusesByIssue = async () => {
-            setStatusesLoading(true);
-            if (selectedIssueType && Object.keys(selectedIssueType).length != 0) {
-                const statusesData = await fetchStatuses();
-                
-                const statusesOptionData = statusesData.find(x=>x.name===selectedIssueType.label).statuses.map((statuses) => ({
-                    label: statuses.name,
-                    value: statuses.name
-
-                }));
-
-                setJiraStatuses(statusesOptionData);
-            }
-            setStatusesLoading(false);
-        }
-        fetchStatusesByIssue();
-    }, [selectedIssueType])
-/**/
     const updateImportConfiguration = async (applicationOptionsdata,priorityOptionsData) => {
 
         const config = await invoke('storage', { storageKey: storageKeys.importConfiguration, type: "GET" });
@@ -215,18 +167,11 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
         if (config && Object.keys(config).length != 0) {
             const defaultSelectedApps = config.applicationId.filter((a) => applicationOptionsdata.some((y) => y.value == a.value));
             setSelctedApplications(defaultSelectedApps);
-            setIssueStates(config.issuesStates);
+            setIssueStates(config.issuesStates)
             setSeverity(config.issueSeverityFilter);
             setSelectedScanTypes(config.scanType);
             setSelectedProject(config.selectedProject);
             setSelectedIssueType(config.selectedIssueType);
-            setSelectedJiraFixedStatus(config.jiraFixedStatus);
-            setSelectedJiraFixedResolution(config.jiraFixedResolution);
-            setSelectedJiraNoiseStatus(config.jiraNoiseStatus);
-            setSelectedJiraNoiseResolution(config.jiraNoiseResolution);
-            setSelectedJiraInProgressStatus(config.jiraInProgressStatus);
-            setSelectedJiraReopenedStatus(config.jiraReopenedStatus);
-
             if(priorityOptionsData.some(x=>x.value==config.jiraSeverityCritical?.value)){
                 setSelectedSeverityCritical(config.jiraSeverityCritical);
             }
@@ -244,7 +189,6 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
             }
             setPolicyIds(config.policyIds);
             setIsChecked(config.biDirectionalEnabled);
-            setIsManual(config.manualMappingEnabled);
         }
     }
 
@@ -321,27 +265,6 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
         }
     };
 
-    const fetchStatuses = async () => {
-        try {
-            const response = await requestJira(`/rest/api/2/project/${selectedProject.value}/statuses`);
-            const statusesData = await response.json();
-            return statusesData;
-        } catch (error) {
-            console.error("Error fetching statusesData:", error);
-            return null;
-        }
-    };
-
-    const fetchResolutions = async () => {
-        try {
-            console.log("fetching resolutions")
-            const response = await requestJira(`/rest/api/3/resolution/search`);
-            const resolutionsData = await response.json(); 
-            return resolutionsData;
-        } catch (error) {
-            console.error("Error fetching resolutionsData:", error);
-        }
-    };/**/
     const submitForm = async (formData) => {
         setConfigSaved(false);
         await saveFormData();
@@ -353,12 +276,6 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
     const saveFormData = async () => {
         try {
             const data = {
-                jiraFixedStatus: selectedJiraFixedStatus,
-                jiraFixedResolution: selectedJiraFixedResolution,
-                jiraNoiseStatus: selectedJiraNoiseStatus,
-                jiraNoiseResolution: selectedJiraNoiseResolution,
-                jiraInProgressStatus: selectedJiraInProgressStatus,
-                jiraReopenedStatus: selectedJiraReopenedStatus,
                 jiraSeverityLow: selectedSeverityLow,
                 jiraSeverityHigh: selectedSeverityHigh,
                 jiraSeverityCritical: selectedSeverityCritical,
@@ -371,8 +288,7 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
                 selectedProject: selectedProject,
                 selectedIssueType: selectedIssueType,
                 policyIds: policyIds,
-                biDirectionalEnabled: isChecked,
-                manualMappingEnabled: isManual
+                biDirectionalEnabled: isChecked
             }
             console.log('data to be submitted', data);
 
@@ -404,30 +320,6 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
 
     const handleJiraPriorityCriticalChange = (e) => {
         setSelectedSeverityCritical(e);
-    }
-
-    const handleJiraFixedStatusChange = (e) => {
-        setSelectedJiraFixedStatus(e || null);
-    }
-
-    const handleJiraFixedResolutionChange = (e) => {
-        setSelectedJiraFixedResolution(e);
-    }
-
-    const handleJiraNoiseStatusChange = (e) => {
-        setSelectedJiraNoiseStatus(e);
-    }
-
-    const handleJiraNoiseResolutionChange = (e) => {
-        setSelectedJiraNoiseResolution(e);
-    }
-
-    const handleJiraInProgressStatusChange = (e) => {
-        setSelectedJiraInProgressStatus(e);
-    }
-
-    const handleJiraReopenedStatusChange = (e) => {
-        setSelectedJiraReopenedStatus(e);
     }
 
     const handleJiraPriorityHighChange = (e) => {
@@ -745,8 +637,7 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
                                     )}
                                 </Box>
 
-
-                                <Box xcss={{ paddingTop: 'space.200' }} >
+                                <Box xcss={{ paddingTop: 'space.200', paddingBottom: 'space.100' }} >
                                     <Heading as="h3">
                                         Status management<RequiredAsterisk />
                                     </Heading>
@@ -789,27 +680,11 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
 
                                 </Box>
 
-                                {isChecked && (<Box>
-                                    <Checkbox
-                                        label="Manual status mapping"
-                                        value="isManual"
-                                        isChecked={isManual}
-                                        onChange={() => {
-                                            setIsManual((prev) => !prev);
-                                        }}
-                                    />
-                                    <HelperMessage>
-                                    By default, the plugin will only set items with the Jira status of "Done" to "Fixed" in Appscan.
-                                    If you would like to override this behaviour, or handle other statuses and resolutions, select this option.
-                                    </HelperMessage>
-                                </Box>
-                                ) /* isChecked */}
-
                                 {/* Begin Jira status mapping */}
                                 {/* Resolved has Fixed */}
                                 {/* Open, In progress, (Close has Noise Fixed Passed)  */}
                                 {/* <Table headers={headers} rows={rows} /> */}
-                                {isManual && isChecked && (<Stack xcss={{ paddingTop: 'space.200', paddingBottom: 'space.100' }}>
+                                <Stack>
                                     {/* Table headers */}
                                     <TableRow>
                                         <TableHeader ><Text><Strong>AppScan status</Strong></Text></TableHeader>
@@ -822,104 +697,22 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
    
                                         <TableCell>Fixed</TableCell>
                                         <TableInputCell>
-                                            <Select
-                                                appearance='default'
-                                                {...register("statusFixed", {
-                                                    required: !selectedJiraFixedStatus || Object.keys(selectedJiraFixedStatus).length == 0 || null,
-                                                })}
-                                                options={jiraStatus}
-                                                value={selectedJiraFixedStatus}
-                                                onChange={handleJiraFixedStatusChange}
-                                                isDisabled={isSubmitting}
-                                                isLoading={statusesLoading}
-                                            ></Select>
                                         </TableInputCell>
                                         <TableInputCell>
-                                            <Select
-                                                appearance='default'
-                                                {...register("resolutionFixed", {
-                                                    required: !selectedJiraFixedResolution || Object.keys(selectedJiraFixedResolution).length == 0 || null,
-                                                })}
-                                                options={jiraResolution || ''}
-                                                value={selectedJiraFixedResolution || ''}
-                                                defaultValue={selectedJiraFixedResolution}
-                                                onChange={handleJiraFixedResolutionChange}
-                                                isDisabled={isSubmitting}
-                                            ></Select>
                                         </TableInputCell>
                                     </TableRow>
                                     <TableRow>
                                         <TableCell>Noise</TableCell>
                                         <TableInputCell>
-                                            <Select
-                                                appearance='default'
-                                                {...register("statusNoise", {
-                                                    required: !selectedJiraNoiseStatus || Object.keys(selectedJiraNoiseStatus).length == 0 || null,
-                                                })}
-                                                options={jiraStatus}
-                                                value={selectedJiraNoiseStatus}
-                                                defaultValue={selectedJiraNoiseStatus}
-                                                onChange={handleJiraNoiseStatusChange}
-                                                isDisabled={isSubmitting}
-                                                isLoading={statusesLoading}
-                                            ></Select>
                                         </TableInputCell>
                                         <TableInputCell>
-                                            <Select
-                                                appearance='default'
-                                                {...register("resolutionNoise", {
-                                                    required: !selectedJiraNoiseResolution || Object.keys(selectedJiraNoiseResolution).length == 0 || null,
-                                                })}
-                                                options={jiraResolution}
-                                                value={selectedJiraNoiseResolution}
-                                                defaultValue={selectedJiraNoiseResolution}
-                                                onChange={handleJiraNoiseResolutionChange}
-                                                isDisabled={isSubmitting}
-                                            ></Select>
                                         </TableInputCell>
-                                    </TableRow>
-                                    <TableRow>
-                                        <TableCell>In progress</TableCell>
-                                        <TableInputCell>
-                                            <Select
-                                                appearance='default'
-                                                {...register("statusInProgress", {
-                                                    required: !selectedJiraInProgressStatus || Object.keys(selectedJiraInProgressStatus).length == 0 || null,
-                                                })}
-                                                options={jiraStatus}
-                                                value={selectedJiraInProgressStatus}
-                                                defaultValue={selectedJiraInProgressStatus}
-                                                onChange={handleJiraInProgressStatusChange}
-                                                isDisabled={isSubmitting}
-                                                isLoading={statusesLoading}
-                                            ></Select>
-                                        </TableInputCell>
-                                        <TableCell />
-                                    </TableRow>
-                                    <TableRow>
-                                        <TableCell>Reopened</TableCell>
-                                        <TableInputCell>
-                                            <Select
-                                                appearance='default'
-                                                {...register("statusReopened", {
-                                                    required: !selectedJiraReopenedStatus || Object.keys(selectedJiraReopenedStatus).length == 0 || null,
-                                                })}
-                                                options={jiraStatus}
-                                                value={selectedJiraReopenedStatus}
-                                                defaultValue={selectedJiraReopenedStatus}
-                                                onChange={handleJiraReopenedStatusChange}
-                                                isDisabled={isSubmitting}
-                                            ></Select>
-                                        </TableInputCell>
-                                        <TableCell />
                                     </TableRow>
 
                                 </Stack> 
-                                ) /* isManual */}
                                 {/* End Jira status mapping */}
 
-
-                                <Box xcss={{ paddingTop: 'space.200', marginBottom: 'space.100' }} >
+                                <Box xcss={{ marginBottom: 'space.100' }} >
 
                                     <Heading as="h3">
                                         AppScan Jira severity mapping<RequiredAsterisk />
