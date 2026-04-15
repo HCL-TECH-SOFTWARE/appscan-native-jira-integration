@@ -27,7 +27,7 @@ modules:
       events:
         - avi:jira:updated:issue
       filter:
-        ignoreSelf: true          
+        ignoreSelf: true
   consumer:
     - key: import-queue-consumer
       queue: import-queue
@@ -75,24 +75,24 @@ resources:
   - key: app_icon
     path: src/frontend/
 app:
-  id: ari:cloud:ecosystem::app/
+  id: ari:cloud:ecosystem::app/3a86a829-8014-470a-a658-f1b2b78caa40
   runtime:
     name: nodejs22.x
   storage:
     entities:
       - name: import-details
         attributes:
-          importId: 
+          importId:
             type: string
-          applicationId: 
+          applicationId:
             type: string
-          issueId: 
+          issueId:
             type: string
-          dateTime: 
+          dateTime:
             type: string
           importType:
             type: string
-          status: 
+          status:
             type: boolean
           details:
             type: string
@@ -103,15 +103,15 @@ app:
           - applicationId
           - dateTime
           - name: by-importId-per-batchid
-            partition: 
+            partition:
               - importId
-            range: 
+            range:
               - batchId
       - name: import-history
         attributes:
-          importId: 
+          importId:
             type: string
-          dateTime: 
+          dateTime:
             type: string
           importType:
             type: string
@@ -121,7 +121,7 @@ app:
             type: integer
           failureCount:
             type: integer
-          status: 
+          status:
             type: boolean
         indexes:
           - importId
@@ -130,10 +130,9 @@ permissions:
   scopes:
     - storage:app
     - read:jira-work
+    - read:status:jira
     - write:jira-work
   external:
     fetch:
       backend:
-        - https://*.appscan.com
-      
-        
+        - address: https://*.appscan.com
