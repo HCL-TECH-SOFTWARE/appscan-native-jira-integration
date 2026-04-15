@@ -23,16 +23,25 @@ import api, { route, fetch, storage } from "@forge/api";
  */
 export const issueUpdateTrigger = async function webtriggerhandler(event, context) {
 
-    console.log("issueUpdateTrigger called");
-    console.log(event);
+    // console.log("issueUpdateTrigger called");
+    // console.log(event);
+    // If formData is not set then the plugin has not been configured or saved.
     const formData = await storage.get(storageKeys.importConfiguration);
     if (!formData || Object.keys(formData).length == 0) {
-        console.error('Import configuration is not set, please provide the configuration!');
+        console.error('issueUpdateTrigger: Import configuration is not set, please provide the configuration!');
         return;
+    }
+
+    // If the issue type that has been updated is not the same as the one configured then we should 
+    // save resources and return silently.
+    if (formData.selectedProject.label !== event.issue.fields.project.name &&
+        formData.selectedIssueType.label !== event.issue.fields.issuetype.name) {
+            return;
     }
     
     if (formData.biDirectionalEnabled){
-
+        console.log("issueUpdateTrigger called");
+        console.log(event);
         const manualMappingEnabled = formData.manualMappingEnabled;
         const jiraFixedStatus = formData.jiraFixedStatus;
         const jiraFixedResolution = formData.jiraFixedResolution;
