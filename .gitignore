@@ -48,3 +48,7 @@ Thumbs.db
 *.mov
 *.wmv
 
+# IDE files
+.swp
+package-lock.json
+package.json
