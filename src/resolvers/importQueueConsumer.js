@@ -34,7 +34,7 @@ const resolver = new Resolver();
 resolver.define("import-queue-consumer", async ({ payload, context }) => {
     // process the event
     const startTime = new Date().getTime();
-    console.log('import queue called', context);
+    console.log('Import queue called - Import ID - ', payload.importId);
 
     const item = payload.item;
     const formData = payload.formData;
@@ -55,7 +55,7 @@ resolver.define("import-queue-consumer", async ({ payload, context }) => {
         issueId: issueId,
         batchId: batchId
     }
-    console.log('import queue payload data', { formData, importDateTime, importType, appScanUrl, appscanEnv }, logMetadata);
+   
 
     try {
         const severityMap = new Map(Object.entries(formData));
@@ -73,7 +73,7 @@ resolver.define("import-queue-consumer", async ({ payload, context }) => {
           priorityResponseJson.forEach(priority => {
             jiraPriorityIDMap[priority.name] = priority.id;
           }); 
-        console.log("jiraPriorityIDMap : " , jiraPriorityIDMap);
+
 
         // Creating a Map from the jiraPriorityIDMap
         const priorityMap = new Map(Object.entries(jiraPriorityIDMap));
@@ -136,7 +136,7 @@ resolver.define("import-queue-consumer", async ({ payload, context }) => {
             body: issueDataJson
         });
 
-        console.log('issue creation response', jiraIssueCreationResponse, logMetadata);
+
         const jiraIssueCreationResponseJson = await jiraIssueCreationResponse.json();
 
         if (jiraIssueCreationResponseJson && jiraIssueCreationResponseJson.hasOwnProperty('errorMessages')) {
@@ -159,14 +159,14 @@ resolver.define("import-queue-consumer", async ({ payload, context }) => {
             body: appIdDataJson
           });
 
-          console.log(`Updated appscanappid property in Jira - Response: ${response.status} ${response.statusText}`);
+          console.log(`Updated appscanappid property in Jira - Response: ${response.status} ${response.statusText}`,logMetadata);
           
 
         // Update the issue comment and external ID in ASoC
         let updateIssueURL = `${appScanUrl}/api/v4/Issues/Application/${item.ApplicationId}?odataFilter=Id%20eq%20${item.Id}`;
         let externalId = jiraIssueCreationResponseJson.key;
         let comment = 'HCL AppScan Integration Jira Plugin created the following issue: ' + jiraBaseUrl + '/browse/' + jiraIssueCreationResponseJson.key;
-        console.log("updating in ASoC", updateIssueURL, externalId, comment, logMetadata);
+
         const updateIssueResponse = await fetch(
             updateIssueURL,
             {
@@ -183,7 +183,7 @@ resolver.define("import-queue-consumer", async ({ payload, context }) => {
             }
         );
 
-        console.log("updade response from ASoC", updateIssueResponse, logMetadata);
+
 
         const updateIssueResponseJson = await updateIssueResponse.json();
         console.log("update done in ASoC", updateIssueResponseJson, logMetadata);
@@ -199,8 +199,8 @@ resolver.define("import-queue-consumer", async ({ payload, context }) => {
                 },
             }
         );
-
-        console.log("file response from ASoC", artifactsRequest, logMetadata);
+        const artifactsResponseJson = await artifactsRequest.json();
+        console.log("file response from ASoC", artifactsResponseJson, logMetadata);
 
         const artifactsResponse = await artifactsRequest.text();
 
@@ -220,7 +220,7 @@ resolver.define("import-queue-consumer", async ({ payload, context }) => {
 
         // Make the request to Jira's attachment API endpoint
 
-        console.log("before uploading file - ", logMetadata);
+
         const attachmentresponse = await api.asApp().requestJira(route`/rest/api/2/issue/${jiraIssueCreationResponseJson.id}/attachments`, {
             method: "POST",
             headers: {
@@ -229,7 +229,7 @@ resolver.define("import-queue-consumer", async ({ payload, context }) => {
             },
             body: payloadString
         });
-        console.log("attachment response in Jira", attachmentresponse, logMetadata);
+
 
         if (attachmentresponse && attachmentresponse.hasOwnProperty('errorMessages')) {
             console.error('Error occured while uploading file to Jira', attachmentresponse, logMetadata);
@@ -237,14 +237,14 @@ resolver.define("import-queue-consumer", async ({ payload, context }) => {
         }
 
         const attachmentresponseJson = await attachmentresponse.json();
-        console.log("attachment done in Jira", logMetadata);
+        console.log("attachment done in Jira", attachmentresponseJson,logMetadata);
 
         await storage.entity(storageKeys.importDetails).set(`import-${uuidv4()}`,
             {
                 importId: importId, applicationId: item.ApplicationId, issueId: item.Id, dateTime: importDateTime, status: true, importType: importType, batchId: batchId
             });
 
-        console.log('import done', logMetadata)
+
     }
     catch (e) {
         console.error('failed Import', e, logMetadata)

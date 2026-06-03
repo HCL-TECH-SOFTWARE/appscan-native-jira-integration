@@ -24,17 +24,16 @@ import api, { route, fetch, storage } from "@forge/api";
 export const issueUpdateTrigger = async function webtriggerhandler(event, context) {
    
     console.log("issueUpdateTrigger called");
-    console.log(event);
+  
     const formData = await storage.get(storageKeys.importConfiguration);
     if (!formData || Object.keys(formData).length == 0) {
         console.error('Import configuration is not set, please provide the configuration!');
         return;
     }
     const biDirectionalEnabled = formData.biDirectionalEnabled;
-    console.log("biDirectionalEnabled : " , biDirectionalEnabled);
 
     if ( biDirectionalEnabled && event.issue.fields.status.name==='Done') {
-        console.log("Processing the issue update : " , biDirectionalEnabled);
+        
 
   const getAppId = await api.asApp().requestJira(route`/rest/api/3/issue/${event.issue.key}/properties/appscanappid`, {
     headers: {
@@ -83,7 +82,7 @@ const authorizationHeader = `Bearer ${data.Token}`;
 let updateIssueURL = `${credentials.url}/api/v4/Issues/Application/${applicationId}?odataFilter=ExternalId%20eq%20'${event.issue.key}'`;
 let status = 'Fixed';
 let comment = 'Fixed on JIRA';
-console.log("updating in ASoC", updateIssueURL, comment , status);
+
 const updateIssueResponse = await fetch(
     updateIssueURL,
     {
@@ -100,13 +99,13 @@ const updateIssueResponse = await fetch(
     }
 );
 
-console.log("updade response from ASoC", updateIssueResponse);
+
 
 const updateIssueResponseJson = await updateIssueResponse.json();
-console.log("update done in ASoC", updateIssueResponseJson);
+console.log("status update done in ASoC", updateIssueResponseJson);
 
 } else {
-  console.log("No match found");
+  console.log("Bi-directional sync is not enabled or issue is not in 'Done' status");
 }
 
 

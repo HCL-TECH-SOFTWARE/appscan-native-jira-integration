@@ -53,7 +53,7 @@ resolver.define('login', async (req) => {
 });
 
 resolver.define('getTenantInfo', async (req) => {
-  console.log('request', req);
+
   const tenantInfo = await fetch(
     req.payload.url + "/api/v4/Account/TenantInfo",
     {
@@ -188,7 +188,7 @@ resolver.define('getIssueCountByImportId', async (req) => {
 
 
   currentCount = importDetails.length;
-  // console.log(`currentCount ${currentCount} lastCount ${lastCount} batchId ${batchId}`);
+
   const res = { count: lastCount + currentCount, lastCount: lastCount, batchId: batchId }
 
   if (isNextBatchExists) {
@@ -232,7 +232,7 @@ resolver.define('pushIssuesForImport', async (req) => {
     console.log('delay count after pushing all apps', delayCount);
 
     let importTime = Date.now();
-    console.log('importTime', importTime);
+    console.log('one time import total time', importTime);
     importTime += (delayCount + 30) * 1000;
     await storage.set(storageKeys.importStatus, { isInProgress: true, importId: importId, isHistoryCalled: false, importTime: importTime });
 

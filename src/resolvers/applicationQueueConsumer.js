@@ -29,7 +29,7 @@ const resolver = new Resolver();
  */
 resolver.define("app-queue-consumer", async ({ payload, context }) => {
 
-    console.log('app queue called', context);
+    console.log('app queue called', payload.importId);
     const appId = payload.appId;
     const policyIds = payload.policyIds;
     const maxIssues = payload.maxIssues;
@@ -52,20 +52,20 @@ resolver.define("app-queue-consumer", async ({ payload, context }) => {
     console.log('app queue payload data', { policyIds, maxIssues, stateFilter, severityFilter, formData, importDateTime, importType, appScanUrl, jiraBaseUrl, scanTypeFilter }, logMetadata);
 
     if (payload.delay > maxAllowedQueueDelayInSeconds) {
-        console.log('app queue delayed', payload.delay, payload, context, logMetadata);
+        console.log('app queue delayed', payload.delay, logMetadata);
         payload.delay = payload.delay - maxAllowedQueueDelayInSeconds;
         await appQueue.push(payload, { delayInSeconds: maxAllowedQueueDelayInSeconds });
         return;
     }
     else if (payload.delay > 0) {
-        console.log('app queue delayed', payload.delay, payload, context, logMetadata);
+        console.log('app queue delayed', payload.delay, logMetadata);
         const delay = payload.delay;
         payload.delay = payload.delay - maxAllowedQueueDelayInSeconds;
         await appQueue.push(payload, { delayInSeconds: delay });
         return;
     }
 
-    console.log('app queue is running', payload.delay, payload, logMetadata);
+    console.log('app queue is running', payload.delay, logMetadata);
 
     let fetchIssuesURL = `${appScanUrl}/api/v4/Issues/Application/${appId}`;
     if (policyIds) {
@@ -79,7 +79,6 @@ resolver.define("app-queue-consumer", async ({ payload, context }) => {
     }
 
     fetchIssuesURL += `&%24top=${maxIssues}&%24filter=%28${stateFilter}%29 and %28${severityFilter}%29 and %28${scanTypeFilter}%29 and ExternalId eq null&%24count=true`;
-    console.log("fetchIssuesURL = ", fetchIssuesURL, logMetadata);
 
     const issuesResponseJson = await fetch(
         fetchIssuesURL,
@@ -91,7 +90,7 @@ resolver.define("app-queue-consumer", async ({ payload, context }) => {
             },
         }
     );
-    console.log("issue response from ASoC", 'appId:', appId, issuesResponseJson, logMetadata)
+
 
     const issueResponseFromASoC = await issuesResponseJson.json();
     console.log("issueResponseFromASoC", 'appId:', appId, issueResponseFromASoC.Count, logMetadata)
