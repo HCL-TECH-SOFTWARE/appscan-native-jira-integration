@@ -95,7 +95,7 @@ resolver.define("app-queue-consumer", async ({ payload, context }) => {
     const issueResponseFromASoC = await issuesResponseJson.json();
     console.log("issueResponseFromASoC", 'appId:', appId, issueResponseFromASoC.Count, logMetadata)
     if (issueResponseFromASoC.hasOwnProperty("Message")) {
-        console.log(
+        console.error(
             "Encountered an error while fetching the issues from AppScan on Cloud. Please check the input values and try again ! ",
             issueResponseFromASoC.Message, logMetadata
         );
