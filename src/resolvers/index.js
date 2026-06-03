@@ -21,7 +21,7 @@ import { appQueue, historyQueue } from './queues';
 import { importHistoryDelayInSeconds, maxEventPerRequestInQueue, appQueueDealyInSeconds, storageKeys, importIssuesDealyInSeconds, importType, importBatchSize, maxAllowedQueueDelayInSeconds } from '../appConstants';
 
 const resolver = new Resolver();
-const clientType = "native-jira-1.1.0";
+const clientType = "native-jira-1.2.2";
 
 resolver.define('login', async (req) => {
 

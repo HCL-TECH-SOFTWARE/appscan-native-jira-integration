@@ -78,7 +78,7 @@ resolver.define("app-queue-consumer", async ({ payload, context }) => {
         fetchIssuesURL += `?applyPolicies=All`;
     }
 
-    fetchIssuesURL += `&%24top=${maxIssues}&%24filter=%28${stateFilter}%29 and %28${severityFilter}%29 and %28${scanTypeFilter}%29 and ExternalId eq null&%24count=true`;
+    fetchIssuesURL += `&%24top=${maxIssues}&%24filter=%28${stateFilter}%29 and %28${severityFilter}%29 and %28${scanTypeFilter}%29 and ExternalId eq null&%24count=true&%24select=Id%2CApplicationId%2CSeverity%2CIssueType%2CIssueTypeId%2CLocation%2CScanName%2CScanner%2CCwe%2CCvss%2CDateCreated%2CLastUpdated%2CLastFound`;
 
     const issuesResponseJson = await fetch(
         fetchIssuesURL,

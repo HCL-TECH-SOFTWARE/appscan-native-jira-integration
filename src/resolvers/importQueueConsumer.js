@@ -199,8 +199,6 @@ resolver.define("import-queue-consumer", async ({ payload, context }) => {
                 },
             }
         );
-        const artifactsResponseJson = await artifactsRequest.json();
-        console.log("file response from ASoC", artifactsResponseJson, logMetadata);
 
         const artifactsResponse = await artifactsRequest.text();
 
