@@ -234,8 +234,8 @@ resolver.define("import-queue-consumer", async ({ payload, context }) => {
             throw new Error(`${attachmentresponse.errorMessages}`);
         }
 
-        const attachmentresponseJson = await attachmentresponse.json();
-        console.log("attachment done in Jira", attachmentresponseJson,logMetadata);
+
+        console.log("attachment done in Jira",logMetadata);
 
         await storage.entity(storageKeys.importDetails).set(`import-${uuidv4()}`,
             {
