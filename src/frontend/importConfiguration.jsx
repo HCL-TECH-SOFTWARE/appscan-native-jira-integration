@@ -796,8 +796,8 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
                                             }}
                                         />
                                         <HelperMessage>
-                                            By default, the plugin will only set items with the Jira status of "Done" to "Fixed" in Appscan.
-                                            If you would like to override this behaviour, or handle other statuses and resolutions, select this option.
+                                            By default, the plugin marks AppScan items as "Fixed" only when the linked Jira issue is moved to "Done".
+                                            Enable this option to customize how other Jira statuses and resolutions map to AppScan statuses.
                                         </HelperMessage>
                                     </Box>
                                 ) /* isChecked */}
