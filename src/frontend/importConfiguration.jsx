@@ -750,7 +750,7 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
                                     <Text><Strong>Status management<RequiredAsterisk /></Strong></Text>
                                     <Checkbox
                                         value="bidirectional"
-                                        label="Issue statuses in Jira Cloud are automatically synced with AppScan"
+                                        label="Issues marked as done in Jira are automatically marked as fixed in AppScan"
                                         isChecked={isChecked}
                                         onChange={() => {
                                             setIsChecked((prev) => !prev);
@@ -770,7 +770,7 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
                                                 </ModalHeader>
                                                 <ModalBody>
                                                     <Text>
-                                                        Selecting this will enable automatic status management.
+                                                        Selecting this will enable automatic status management. Issues marked as done in Jira are automatically marked as fixed in AppScan.
                                                     </Text>
                                                 </ModalBody>
                                                 <ModalFooter>
