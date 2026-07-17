@@ -102,7 +102,10 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
     const [selectedJiraNoiseStatus, setSelectedJiraNoiseStatus] = useState();
     const [selectedJiraNoiseResolution, setSelectedJiraNoiseResolution] = useState();
     const [selectedJiraInProgressStatus, setSelectedJiraInProgressStatus] = useState();
+    const [selectedJiraInProgressResolution, setSelectedJiraInProgressResolution] = useState();
     const [selectedJiraReopenedStatus, setSelectedJiraReopenedStatus] = useState();
+    const [selectedJiraReopenedResolution, setSelectedJiraReopenedResolution] = useState();
+    const [duplicateMappingError, setDuplicateMappingError] = useState('');
 
     useEffect(() => {
         const initializeImportConfig = async () => {
@@ -227,7 +230,9 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
             setSelectedJiraNoiseStatus(config.jiraNoiseStatus);
             setSelectedJiraNoiseResolution(config.jiraNoiseResolution);
             setSelectedJiraInProgressStatus(config.jiraInProgressStatus);
+            setSelectedJiraInProgressResolution(config.jiraInProgressResolution);
             setSelectedJiraReopenedStatus(config.jiraReopenedStatus);
+            setSelectedJiraReopenedResolution(config.jiraReopenedResolution);
             if(priorityOptionsData.some(x=>x.value==config.jiraSeverityCritical?.value)){
                 setSelectedSeverityCritical(config.jiraSeverityCritical);
             }
@@ -346,6 +351,28 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
 
     const submitForm = async (formData) => {
         setConfigSaved(false);
+        setDuplicateMappingError('');
+
+        if (isManual && isChecked) {
+            const mappings = [
+                { name: 'Fixed', status: selectedJiraFixedStatus?.value, resolution: selectedJiraFixedResolution?.value || '' },
+                { name: 'Noise', status: selectedJiraNoiseStatus?.value, resolution: selectedJiraNoiseResolution?.value || '' },
+                { name: 'In Progress', status: selectedJiraInProgressStatus?.value, resolution: selectedJiraInProgressResolution?.value || '' },
+                { name: 'Reopened', status: selectedJiraReopenedStatus?.value, resolution: selectedJiraReopenedResolution?.value || '' },
+            ].filter(m => m.status);
+
+            for (let i = 0; i < mappings.length; i++) {
+                for (let j = i + 1; j < mappings.length; j++) {
+                    if (mappings[i].status === mappings[j].status && mappings[i].resolution === mappings[j].resolution) {
+                        setDuplicateMappingError(
+                            `Duplicate mapping: "${mappings[i].name}" and "${mappings[j].name}" have the same Jira status and resolution. Please use distinct mappings.`
+                        );
+                        return;
+                    }
+                }
+            }
+        }
+
         await saveFormData();
         setConfigSaved(true);
     };
@@ -360,7 +387,9 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
                 jiraNoiseStatus: selectedJiraNoiseStatus,
                 jiraNoiseResolution: selectedJiraNoiseResolution,
                 jiraInProgressStatus: selectedJiraInProgressStatus,
+                jiraInProgressResolution: selectedJiraInProgressResolution,
                 jiraReopenedStatus: selectedJiraReopenedStatus,
+                jiraReopenedResolution: selectedJiraReopenedResolution,
                 jiraSeverityLow: selectedSeverityLow,
                 jiraSeverityHigh: selectedSeverityHigh,
                 jiraSeverityCritical: selectedSeverityCritical,
@@ -443,8 +472,16 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
         setSelectedJiraInProgressStatus(e);
     }
 
+    const handleJiraInProgressResolutionChange = (e) => {
+        setSelectedJiraInProgressResolution(e);
+    }
+
     const handleJiraReopenedStatusChange = (e) => {
         setSelectedJiraReopenedStatus(e);
+    }
+
+    const handleJiraReopenedResolutionChange = (e) => {
+        setSelectedJiraReopenedResolution(e);
     }
     const onPolicyChange = (e) => {
         setPolicyIds(e.target.value);
@@ -891,7 +928,16 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
                                                     isLoading={statusesLoading}
                                                 ></Select>
                                             </TableInputCell>
-                                            <TableCell />
+                                            <TableInputCell>
+                                                <Select
+                                                    appearance='default'
+                                                    options={jiraResolution}
+                                                    value={selectedJiraInProgressResolution || ''}
+                                                    defaultValue={selectedJiraInProgressResolution}
+                                                    onChange={handleJiraInProgressResolutionChange}
+                                                    isDisabled={isSubmitting}
+                                                ></Select>
+                                            </TableInputCell>
                                         </TableRow>
                                         <TableRow>
                                             <TableCell>Reopened</TableCell>
@@ -908,11 +954,25 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
                                                     isDisabled={isSubmitting}
                                                 ></Select>
                                             </TableInputCell>
-                                            <TableCell />
+                                            <TableInputCell>
+                                                <Select
+                                                    appearance='default'
+                                                    options={jiraResolution}
+                                                    value={selectedJiraReopenedResolution || ''}
+                                                    defaultValue={selectedJiraReopenedResolution}
+                                                    onChange={handleJiraReopenedResolutionChange}
+                                                    isDisabled={isSubmitting}
+                                                ></Select>
+                                            </TableInputCell>
                                         </TableRow>
 
                                     </Stack>
                                 ) /* isManual */}
+                                {duplicateMappingError && (
+                                    <SectionMessage appearance="error">
+                                        <Text>{duplicateMappingError}</Text>
+                                    </SectionMessage>
+                                )}
                                 {/* End Jira status mapping */}
 
                                 <Box xcss={{ marginBottom: 'space.100' }} >

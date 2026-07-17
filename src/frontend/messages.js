@@ -18,7 +18,8 @@ const messages = {
     scanTypeFieldError: "Please select at least one scan type",
     projectFieldError: "Please select at least one project",
     issueTypeFieldError: "Please select at least one Issue type",
-    importConfigSaveSuccess: "Import configuration saved successfully!"
+    importConfigSaveSuccess: "Import configuration saved successfully!",
+    duplicateMappingError: "Duplicate mapping detected. Each status and resolution combination must be unique."
   };
   
   export default messages;

@@ -43,7 +43,9 @@ export const issueUpdateTrigger = async function webtriggerhandler(event) {
     const jiraNoiseStatus = formData.jiraNoiseStatus;
     const jiraNoiseResolution = formData.jiraNoiseResolution;
     const jiraInProgressStatus = formData.jiraInProgressStatus;
+    const jiraInProgressResolution = formData.jiraInProgressResolution;
     const jiraReopenedStatus = formData.jiraReopenedStatus;
+    const jiraReopenedResolution = formData.jiraReopenedResolution;
 
     const issueKey = event && event.issue ? event.issue.key : undefined;
     const currentStatusName = event && event.issue && event.issue.fields && event.issue.fields.status
@@ -52,6 +54,34 @@ export const issueUpdateTrigger = async function webtriggerhandler(event) {
     const changedItems = event && event.changelog && event.changelog.items ? event.changelog.items : [];
     const statusChange = changedItems.find((item) => item.field === 'status');
     const resolutionChange = changedItems.find((item) => item.field === 'resolution');
+
+    // Skip resolution-only changes to avoid double processing.
+    // Resolution is fetched from Jira API when the status change fires.
+    if (!statusChange) {
+        console.log(`issueUpdateTrigger skipped for ${issueKey || 'unknown'}: no status change in changelog`);
+        return;
+    }
+
+    // Get resolution from changelog if present, otherwise fetch from Jira API
+    let currentResolutionName = resolutionChange ? resolutionChange['toString'] : undefined;
+    if (!currentResolutionName && issueKey) {
+        try {
+            const issueResponse = await api.asApp().requestJira(
+                route`/rest/api/3/issue/${issueKey}?fields=resolution`,
+                { headers: { Accept: 'application/json' } }
+            );
+            if (issueResponse.ok) {
+                const issueData = await issueResponse.json();
+                currentResolutionName = issueData.fields && issueData.fields.resolution
+                    ? issueData.fields.resolution.name
+                    : undefined;
+            }
+        } catch (err) {
+            console.error(`issueUpdateTrigger: failed to fetch resolution for ${issueKey}:`, err);
+        }
+    }
+
+    console.log(`issueUpdateTrigger: issue=${issueKey}, status=${currentStatusName}, resolution=${currentResolutionName}, manualMapping=${manualMappingEnabled}, biDirectional=${biDirectionalEnabled}`);
 
     let updatedStatus;
 
@@ -78,35 +108,55 @@ export const issueUpdateTrigger = async function webtriggerhandler(event) {
             return;
         }
 
-        const changedToValues = [
-            statusChange && statusChange.toString,
-            resolutionChange && resolutionChange.toString
-        ].filter(Boolean);
+        const mappings = [
+            {
+                name: 'Fixed', value: 'fixed',
+                status: jiraFixedStatus && jiraFixedStatus.value,
+                resolution: jiraFixedResolution && jiraFixedResolution.value
+            },
+            {
+                name: 'Noise', value: 'noise',
+                status: jiraNoiseStatus && jiraNoiseStatus.value,
+                resolution: jiraNoiseResolution && jiraNoiseResolution.value
+            },
+            {
+                name: 'In Progress', value: 'inprogress',
+                status: jiraInProgressStatus && jiraInProgressStatus.value,
+                resolution: jiraInProgressResolution && jiraInProgressResolution.value
+            },
+            {
+                name: 'Reopened', value: 'reopened',
+                status: jiraReopenedStatus && jiraReopenedStatus.value,
+                resolution: jiraReopenedResolution && jiraReopenedResolution.value
+            }
+        ].filter(m => m.status);
 
-        if (changedToValues.includes(jiraNoiseResolution && jiraNoiseResolution.value) || changedToValues.includes(jiraNoiseStatus && jiraNoiseStatus.value)) {
+        const hasResolution = (r) => r && r.trim() !== '';
+
+        // Tier 1: Match on both status AND resolution (most specific)
+        const exactMatch = mappings.find(m =>
+            hasResolution(m.resolution) &&
+            m.status === currentStatusName &&
+            m.resolution === currentResolutionName
+        );
+
+        // Tier 2: Match on status only (for mappings with no resolution configured)
+        const statusOnlyMatch = mappings.find(m =>
+            !hasResolution(m.resolution) &&
+            m.status === currentStatusName
+        );
+
+        const match = exactMatch || statusOnlyMatch;
+
+        if (match) {
             updatedStatus = {
-                Name: 'Noise',
-                Value: 'noise'
-            };
-        } else if (changedToValues.includes(jiraFixedResolution && jiraFixedResolution.value) || changedToValues.includes(jiraFixedStatus && jiraFixedStatus.value)) {
-            updatedStatus = {
-                Name: 'Fixed',
-                Value: 'fixed'
-            };
-        } else if (changedToValues.includes(jiraInProgressStatus && jiraInProgressStatus.value)) {
-            updatedStatus = {
-                Name: 'In Progress',
-                Value: 'inprogress'
-            };
-        } else if (changedToValues.includes(jiraReopenedStatus && jiraReopenedStatus.value)) {
-            updatedStatus = {
-                Name: 'Reopened',
-                Value: 'reopened'
+                Name: match.name,
+                Value: match.value
             };
         }
 
         if (!updatedStatus) {
-            console.log(`Manual sync mode skipped for Jira issue ${issueKey || 'unknown'}: changed Jira values are not mapped`);
+            console.log(`Manual sync mode skipped for Jira issue ${issueKey || 'unknown'}: current status ${currentStatusName || 'unknown'} with resolution ${currentResolutionName || 'none'} did not match any mapping`);
             return;
         }
     }
