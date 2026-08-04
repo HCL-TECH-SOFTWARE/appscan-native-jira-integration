@@ -845,17 +845,19 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
                                     </ModalTransition>
 
                                 </Box>
-                                {isChecked && (<Box>
-                                        <Checkbox
-                                            label="Custom status mapping"
-                                            value="isManual"
-                                            isChecked={isManual}
-                                            onChange={() => {
-                                                setIsManual((prev) => !prev);
-                                            }}
-                                        />
+                                {isChecked && (<Box xcss={{ paddingTop: 'space.100' }}>
+                                        <Inline alignBlock="center" space="space.100">
+                                            <Toggle
+                                                id="custom-status-mapping"
+                                                isChecked={isManual}
+                                                onChange={() => {
+                                                    setIsManual((prev) => !prev);
+                                                }}
+                                            />
+                                            <Text>Custom status mapping</Text>
+                                        </Inline>
                                         <HelperMessage>
-                                            Enable this option to customize how Jira statuses and resolutions map to AppScan statuses.
+                                            When off, only "Done" in Jira maps to "Fixed" in AppScan. Turn on to define your own mappings below.
                                         </HelperMessage>
                                     </Box>
                                 ) /* isChecked */}
