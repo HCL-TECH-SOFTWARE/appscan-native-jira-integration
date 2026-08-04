@@ -847,7 +847,7 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
                                 </Box>
                                 {isChecked && (<Box>
                                         <Checkbox
-                                            label="Manual status mapping"
+                                            label="Custom status mapping"
                                             value="isManual"
                                             isChecked={isManual}
                                             onChange={() => {
@@ -855,8 +855,7 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
                                             }}
                                         />
                                         <HelperMessage>
-                                            By default, the plugin marks AppScan items as "Fixed" only when the linked Jira work item is moved to "Done".
-                                            Enable this option to customize how other Jira statuses and resolutions map to AppScan statuses.
+                                            Enable this option to customize how Jira statuses and resolutions map to AppScan statuses.
                                         </HelperMessage>
                                     </Box>
                                 ) /* isChecked */}
