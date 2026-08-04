@@ -523,7 +523,8 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
     return (
         <>
             <Box xcss={{
-                width: '35%',
+                maxWidth: '600px',
+                width: '100%',
                 position: 'relative'
             }}>
                 {showLoader ? <DefaultLoader /> :
@@ -532,6 +533,10 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
                             <Text>{messages.expiredCredentials}</Text>
                         </SectionMessage>  </Box> : ''}
                         <FormSection>
+                            <Box xcss={{ marginBottom: 'space.100' }}>
+                                <Heading as="h3">Applications & policies</Heading>
+                                <HelperMessage>Select the applications and policies to import findings from.</HelperMessage>
+                            </Box>
                             <Stack space="space.100">
                                 <Box >
                                     <Label labelFor={getFieldId("applicationId")}>
@@ -586,13 +591,15 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
                                         <ErrorMessage>{messages.appFieldError}</ErrorMessage>
                                     )}
                                 </Box>
+                            </Stack>
+                        </FormSection>
 
-                                <Box xcss={{ marginBottom: 'space.100', marginTop: 'space.200' }} >
-
-                                    <Heading as="h3">
-                                        Customize issue import
-                                    </Heading>
-                                </Box>
+                        <FormSection>
+                            <Box xcss={{ marginTop: 'space.300', marginBottom: 'space.100' }}>
+                                <Heading as="h3">Customize import</Heading>
+                                <HelperMessage>Choose which AppScan findings to import based on their status, severity, and scan type.</HelperMessage>
+                            </Box>
+                            <Stack space="space.100">
                                 <Box>
 
                                     <Text><Strong>Status<RequiredAsterisk /></Strong></Text>
@@ -734,6 +741,15 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
                                         <ErrorMessage>{messages.scanTypeFieldError}</ErrorMessage>
                                     )}
                                 </Box>
+                            </Stack>
+                        </FormSection>
+
+                        <FormSection>
+                            <Box xcss={{ marginTop: 'space.300', marginBottom: 'space.100' }}>
+                                <Heading as="h3">Jira project & work item type</Heading>
+                                <HelperMessage>Choose the Jira project and work item type where imported findings will be created.</HelperMessage>
+                            </Box>
+                            <Stack space="space.100">
                                 <Box >
                                     <Label labelFor={getFieldId("selectedProject")}>
                                         Jira project
@@ -752,7 +768,7 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
                                     >
                                     </Select>
                                     <HelperMessage>
-                                    AppScan relies on the 'Priority' field in your Jira project to synchronize the security issue severity level.
+                                    AppScan relies on the 'Priority' field in your Jira project to synchronize the security finding severity level.
                                     Please ensure the 'Priority' field is available in the designated Jira project.
                                     </HelperMessage>
                                     {errors["selectedProject"] && (
@@ -761,7 +777,7 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
                                 </Box>
                                 <Box >
                                     <Label labelFor={getFieldId("selectedIssueType")}>
-                                        Jira issue type
+                                        Jira work item type
                                         <RequiredAsterisk />
                                     </Label>
                                     <Select
@@ -781,13 +797,19 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
                                         <ErrorMessage>{messages.issueTypeFieldError}</ErrorMessage>
                                     )}
                                 </Box>
+                            </Stack>
+                        </FormSection>
 
-
-                                <Box xcss={{ paddingTop: 'space.200', paddingBottom: 'space.100' }} >
-                                    <Text><Strong>Status management<RequiredAsterisk /></Strong></Text>
+                        <FormSection>
+                            <Box xcss={{ marginTop: 'space.300', marginBottom: 'space.100' }}>
+                                <Heading as="h3">Status management</Heading>
+                                <HelperMessage>Configure automatic status synchronization between Jira and AppScan.</HelperMessage>
+                            </Box>
+                            <Stack space="space.100">
+                                <Box>
                                     <Checkbox
                                         value="bidirectional"
-                                        label="Issues marked as done in Jira are automatically marked as fixed in AppScan"
+                                        label="Jira work items marked as done are automatically fixed in AppScan"
                                         isChecked={isChecked}
                                         onChange={() => {
                                             setIsChecked((prev) => !prev);
@@ -807,7 +829,7 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
                                                 </ModalHeader>
                                                 <ModalBody>
                                                     <Text>
-                                                        Selecting this will enable automatic status management. Issues marked as done in Jira are automatically marked as fixed in AppScan.
+                                                        Selecting this will enable automatic status management. Jira work items marked as done are automatically fixed in AppScan.
                                                     </Text>
                                                 </ModalBody>
                                                 <ModalFooter>
@@ -833,7 +855,7 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
                                             }}
                                         />
                                         <HelperMessage>
-                                            By default, the plugin marks AppScan items as "Fixed" only when the linked Jira issue is moved to "Done".
+                                            By default, the plugin marks AppScan items as "Fixed" only when the linked Jira work item is moved to "Done".
                                             Enable this option to customize how other Jira statuses and resolutions map to AppScan statuses.
                                         </HelperMessage>
                                     </Box>
@@ -974,14 +996,16 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
                                     </SectionMessage>
                                 )}
                                 {/* End Jira status mapping */}
+                            </Stack>
+                        </FormSection>
 
-                                <Box xcss={{ marginBottom: 'space.100' }} >
+                        <FormSection>
+                            <Box xcss={{ marginTop: 'space.300', marginBottom: 'space.100' }}>
+                                <Heading as="h3">Severity mapping<RequiredAsterisk /></Heading>
+                                <HelperMessage>Map each AppScan severity level to a Jira priority. All five mappings are required.</HelperMessage>
+                            </Box>
 
-                                    <Heading as="h3">
-                                        AppScan Jira severity mapping<RequiredAsterisk />
-                                    </Heading>
-                                </Box>
-
+                            <Stack space="space.100">
                                 {/* <Table headers={headers} rows={rows} /> */}
                                 <Stack>
                                     {/* Table headers */}
@@ -1083,17 +1107,15 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
                                     </TableRow>
 
                                 </Stack>
-
-
-                                <>
-                                    {isConfigSaved && (
-                                        <SectionMessage appearance="success">
-                                            <Text>{messages.importConfigSaveSuccess}</Text>
-                                        </SectionMessage>
-                                    )}
-                                </>
                             </Stack>
                         </FormSection>
+                        <>
+                            {isConfigSaved && (
+                                <SectionMessage appearance="success">
+                                    <Text>{messages.importConfigSaveSuccess}</Text>
+                                </SectionMessage>
+                            )}
+                        </>
                         <FormFooter align='start'>
                             <Button appearance="primary" isDisabled={isSubmitting} type="submit">
                                 Save configuration {isSubmitting ? <Spinner appearance='inherit' size={'medium'} /> : ''}
