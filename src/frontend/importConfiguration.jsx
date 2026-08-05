@@ -969,9 +969,7 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
                                             <TableInputCell>
                                                 <Select
                                                     appearance='default'
-                                                    {...register("statusFixed", {
-                                                        required: !selectedJiraFixedStatus || Object.keys(selectedJiraFixedStatus).length == 0 || null,
-                                                    })}
+                                                    {...register("statusFixed")}
                                                     options={jiraStatus}
                                                     value={selectedJiraFixedStatus}
                                                     onChange={handleJiraFixedStatusChange}
@@ -982,9 +980,7 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
                                             <TableInputCell>
                                                 <Select
                                                     appearance='default'
-                                                    {...register("resolutionFixed", {
-                                                        required: !selectedJiraFixedResolution || Object.keys(selectedJiraFixedResolution).length == 0 || null,
-                                                    })}
+                                                    {...register("resolutionFixed")}
                                                     options={jiraResolution || ''}
                                                     value={selectedJiraFixedResolution || ''}
                                                     defaultValue={selectedJiraFixedResolution}
@@ -998,9 +994,7 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
                                             <TableInputCell>
                                                 <Select
                                                     appearance='default'
-                                                    {...register("statusNoise", {
-                                                        required: !selectedJiraNoiseStatus || Object.keys(selectedJiraNoiseStatus).length == 0 || null,
-                                                    })}
+                                                    {...register("statusNoise")}
                                                     options={jiraStatus}
                                                     value={selectedJiraNoiseStatus}
                                                     defaultValue={selectedJiraNoiseStatus}
@@ -1012,9 +1006,7 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
                                             <TableInputCell>
                                                 <Select
                                                     appearance='default'
-                                                    {...register("resolutionNoise", {
-                                                        required: !selectedJiraNoiseResolution || Object.keys(selectedJiraNoiseResolution).length == 0 || null,
-                                                    })}
+                                                    {...register("resolutionNoise")}
                                                     options={jiraResolution}
                                                     value={selectedJiraNoiseResolution}
                                                     defaultValue={selectedJiraNoiseResolution}
@@ -1028,9 +1020,7 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
                                             <TableInputCell>
                                                 <Select
                                                     appearance='default'
-                                                    {...register("statusInProgress", {
-                                                        required: !selectedJiraInProgressStatus || Object.keys(selectedJiraInProgressStatus).length == 0 || null,
-                                                    })}
+                                                    {...register("statusInProgress")}
                                                     options={jiraStatus}
                                                     value={selectedJiraInProgressStatus}
                                                     defaultValue={selectedJiraInProgressStatus}
@@ -1055,9 +1045,7 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
                                             <TableInputCell>
                                                 <Select
                                                     appearance='default'
-                                                    {...register("statusReopened", {
-                                                        required: !selectedJiraReopenedStatus || Object.keys(selectedJiraReopenedStatus).length == 0 || null,
-                                                    })}
+                                                    {...register("statusReopened")}
                                                     options={jiraStatus}
                                                     value={selectedJiraReopenedStatus}
                                                     defaultValue={selectedJiraReopenedStatus}
