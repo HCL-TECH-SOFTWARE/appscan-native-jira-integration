@@ -46,6 +46,10 @@ export const issueUpdateTrigger = async function webtriggerhandler(event) {
     const jiraInProgressResolution = formData.jiraInProgressResolution;
     const jiraReopenedStatus = formData.jiraReopenedStatus;
     const jiraReopenedResolution = formData.jiraReopenedResolution;
+    const jiraOpenStatus = formData.jiraOpenStatus;
+    const jiraOpenResolution = formData.jiraOpenResolution;
+    const jiraPassedStatus = formData.jiraPassedStatus;
+    const jiraPassedResolution = formData.jiraPassedResolution;
 
     const issueKey = event && event.issue ? event.issue.key : undefined;
     const currentStatusName = event && event.issue && event.issue.fields && event.issue.fields.status
@@ -100,7 +104,9 @@ export const issueUpdateTrigger = async function webtriggerhandler(event) {
             jiraFixedStatus && jiraFixedStatus.value,
             jiraNoiseStatus && jiraNoiseStatus.value,
             jiraInProgressStatus && jiraInProgressStatus.value,
-            jiraReopenedStatus && jiraReopenedStatus.value
+            jiraReopenedStatus && jiraReopenedStatus.value,
+            jiraOpenStatus && jiraOpenStatus.value,
+            jiraPassedStatus && jiraPassedStatus.value
         ].filter(Boolean);
 
         if (!manualStatuses.includes(currentStatusName)) {
@@ -128,6 +134,16 @@ export const issueUpdateTrigger = async function webtriggerhandler(event) {
                 name: 'Reopened', value: 'reopened',
                 status: jiraReopenedStatus && jiraReopenedStatus.value,
                 resolution: jiraReopenedResolution && jiraReopenedResolution.value
+            },
+            {
+                name: 'Open', value: 'open',
+                status: jiraOpenStatus && jiraOpenStatus.value,
+                resolution: jiraOpenResolution && jiraOpenResolution.value
+            },
+            {
+                name: 'Passed', value: 'passed',
+                status: jiraPassedStatus && jiraPassedStatus.value,
+                resolution: jiraPassedResolution && jiraPassedResolution.value
             }
         ].filter(m => m.status);
 

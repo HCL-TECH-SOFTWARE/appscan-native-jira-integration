@@ -105,6 +105,10 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
     const [selectedJiraInProgressResolution, setSelectedJiraInProgressResolution] = useState();
     const [selectedJiraReopenedStatus, setSelectedJiraReopenedStatus] = useState();
     const [selectedJiraReopenedResolution, setSelectedJiraReopenedResolution] = useState();
+    const [selectedJiraOpenStatus, setSelectedJiraOpenStatus] = useState();
+    const [selectedJiraOpenResolution, setSelectedJiraOpenResolution] = useState();
+    const [selectedJiraPassedStatus, setSelectedJiraPassedStatus] = useState();
+    const [selectedJiraPassedResolution, setSelectedJiraPassedResolution] = useState();
     const [duplicateMappingError, setDuplicateMappingError] = useState('');
 
     useEffect(() => {
@@ -204,7 +208,14 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
 
                 }));
 
-                setJiraStatuses(statusesOptionData);
+                const statusOptionsList = [
+                    {
+                        label: "N/A",
+                        value: ""
+                    },
+                    ...statusesOptionData
+                ];
+                setJiraStatuses(statusOptionsList);
             }
             setStatusesLoading(false);
         }
@@ -233,6 +244,10 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
             setSelectedJiraInProgressResolution(config.jiraInProgressResolution);
             setSelectedJiraReopenedStatus(config.jiraReopenedStatus);
             setSelectedJiraReopenedResolution(config.jiraReopenedResolution);
+            setSelectedJiraOpenStatus(config.jiraOpenStatus);
+            setSelectedJiraOpenResolution(config.jiraOpenResolution);
+            setSelectedJiraPassedStatus(config.jiraPassedStatus);
+            setSelectedJiraPassedResolution(config.jiraPassedResolution);
             if(priorityOptionsData.some(x=>x.value==config.jiraSeverityCritical?.value)){
                 setSelectedSeverityCritical(config.jiraSeverityCritical);
             }
@@ -349,28 +364,36 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
         }
     };
 
-    const submitForm = async (formData) => {
-        setConfigSaved(false);
-        setDuplicateMappingError('');
+    const checkDuplicateMappings = (overrides = {}) => {
+        const getVal = (key, selected) => overrides[key] !== undefined ? overrides[key] : selected;
+        const mappings = [
+            { name: 'Fixed', status: getVal('fixedStatus', selectedJiraFixedStatus)?.value, resolution: getVal('fixedResolution', selectedJiraFixedResolution)?.value || '' },
+            { name: 'Noise', status: getVal('noiseStatus', selectedJiraNoiseStatus)?.value, resolution: getVal('noiseResolution', selectedJiraNoiseResolution)?.value || '' },
+            { name: 'In Progress', status: getVal('inProgressStatus', selectedJiraInProgressStatus)?.value, resolution: getVal('inProgressResolution', selectedJiraInProgressResolution)?.value || '' },
+            { name: 'Reopened', status: getVal('reopenedStatus', selectedJiraReopenedStatus)?.value, resolution: getVal('reopenedResolution', selectedJiraReopenedResolution)?.value || '' },
+            { name: 'Open', status: getVal('openStatus', selectedJiraOpenStatus)?.value, resolution: getVal('openResolution', selectedJiraOpenResolution)?.value || '' },
+            { name: 'Passed', status: getVal('passedStatus', selectedJiraPassedStatus)?.value, resolution: getVal('passedResolution', selectedJiraPassedResolution)?.value || '' },
+        ].filter(m => m.status && m.status.trim() !== '');
 
-        if (isManual && isChecked) {
-            const mappings = [
-                { name: 'Fixed', status: selectedJiraFixedStatus?.value, resolution: selectedJiraFixedResolution?.value || '' },
-                { name: 'Noise', status: selectedJiraNoiseStatus?.value, resolution: selectedJiraNoiseResolution?.value || '' },
-                { name: 'In Progress', status: selectedJiraInProgressStatus?.value, resolution: selectedJiraInProgressResolution?.value || '' },
-                { name: 'Reopened', status: selectedJiraReopenedStatus?.value, resolution: selectedJiraReopenedResolution?.value || '' },
-            ].filter(m => m.status);
-
-            for (let i = 0; i < mappings.length; i++) {
-                for (let j = i + 1; j < mappings.length; j++) {
-                    if (mappings[i].status === mappings[j].status && mappings[i].resolution === mappings[j].resolution) {
-                        setDuplicateMappingError(
-                            `Duplicate mapping: "${mappings[i].name}" and "${mappings[j].name}" have the same Jira status and resolution. Please use distinct mappings.`
-                        );
-                        return;
-                    }
+        for (let i = 0; i < mappings.length; i++) {
+            for (let j = i + 1; j < mappings.length; j++) {
+                if (mappings[i].status === mappings[j].status && mappings[i].resolution === mappings[j].resolution) {
+                    setDuplicateMappingError(
+                        `Duplicate mapping: "${mappings[i].name}" and "${mappings[j].name}" have the same Jira status and resolution. Please use distinct mappings.`
+                    );
+                    return true;
                 }
             }
+        }
+        setDuplicateMappingError('');
+        return false;
+    };
+
+    const submitForm = async (formData) => {
+        setConfigSaved(false);
+
+        if (isManual && isChecked && checkDuplicateMappings()) {
+            return;
         }
 
         await saveFormData();
@@ -390,6 +413,10 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
                 jiraInProgressResolution: selectedJiraInProgressResolution,
                 jiraReopenedStatus: selectedJiraReopenedStatus,
                 jiraReopenedResolution: selectedJiraReopenedResolution,
+                jiraOpenStatus: selectedJiraOpenStatus,
+                jiraOpenResolution: selectedJiraOpenResolution,
+                jiraPassedStatus: selectedJiraPassedStatus,
+                jiraPassedResolution: selectedJiraPassedResolution,
                 jiraSeverityLow: selectedSeverityLow,
                 jiraSeverityHigh: selectedSeverityHigh,
                 jiraSeverityCritical: selectedSeverityCritical,
@@ -454,35 +481,96 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
     }
     const handleJiraFixedStatusChange = (e) => {
         setSelectedJiraFixedStatus(e || null);
+        if (!e || !e.value) {
+            setSelectedJiraFixedResolution({ label: 'N/A', value: '' });
+            checkDuplicateMappings({ fixedStatus: e, fixedResolution: { label: 'N/A', value: '' } });
+        } else {
+            checkDuplicateMappings({ fixedStatus: e });
+        }
     }
 
     const handleJiraFixedResolutionChange = (e) => {
         setSelectedJiraFixedResolution(e);
+        checkDuplicateMappings({ fixedResolution: e });
     }
 
     const handleJiraNoiseStatusChange = (e) => {
         setSelectedJiraNoiseStatus(e);
+        if (!e || !e.value) {
+            setSelectedJiraNoiseResolution({ label: 'N/A', value: '' });
+            checkDuplicateMappings({ noiseStatus: e, noiseResolution: { label: 'N/A', value: '' } });
+        } else {
+            checkDuplicateMappings({ noiseStatus: e });
+        }
     }
 
     const handleJiraNoiseResolutionChange = (e) => {
         setSelectedJiraNoiseResolution(e);
+        checkDuplicateMappings({ noiseResolution: e });
     }
 
     const handleJiraInProgressStatusChange = (e) => {
         setSelectedJiraInProgressStatus(e);
+        if (!e || !e.value) {
+            setSelectedJiraInProgressResolution({ label: 'N/A', value: '' });
+            checkDuplicateMappings({ inProgressStatus: e, inProgressResolution: { label: 'N/A', value: '' } });
+        } else {
+            checkDuplicateMappings({ inProgressStatus: e });
+        }
     }
 
     const handleJiraInProgressResolutionChange = (e) => {
         setSelectedJiraInProgressResolution(e);
+        checkDuplicateMappings({ inProgressResolution: e });
     }
 
     const handleJiraReopenedStatusChange = (e) => {
         setSelectedJiraReopenedStatus(e);
+        if (!e || !e.value) {
+            setSelectedJiraReopenedResolution({ label: 'N/A', value: '' });
+            checkDuplicateMappings({ reopenedStatus: e, reopenedResolution: { label: 'N/A', value: '' } });
+        } else {
+            checkDuplicateMappings({ reopenedStatus: e });
+        }
     }
 
     const handleJiraReopenedResolutionChange = (e) => {
         setSelectedJiraReopenedResolution(e);
+        checkDuplicateMappings({ reopenedResolution: e });
     }
+
+    const handleJiraOpenStatusChange = (e) => {
+        setSelectedJiraOpenStatus(e);
+        if (!e || !e.value) {
+            setSelectedJiraOpenResolution({ label: 'N/A', value: '' });
+            checkDuplicateMappings({ openStatus: e, openResolution: { label: 'N/A', value: '' } });
+        } else {
+            checkDuplicateMappings({ openStatus: e });
+        }
+    }
+
+    const handleJiraOpenResolutionChange = (e) => {
+        setSelectedJiraOpenResolution(e);
+        checkDuplicateMappings({ openResolution: e });
+    }
+
+    const handleJiraPassedStatusChange = (e) => {
+        setSelectedJiraPassedStatus(e);
+        if (!e || !e.value) {
+            setSelectedJiraPassedResolution({ label: 'N/A', value: '' });
+            checkDuplicateMappings({ passedStatus: e, passedResolution: { label: 'N/A', value: '' } });
+        } else {
+            checkDuplicateMappings({ passedStatus: e });
+        }
+    }
+
+    const handleJiraPassedResolutionChange = (e) => {
+        setSelectedJiraPassedResolution(e);
+        checkDuplicateMappings({ passedResolution: e });
+    }
+    const isStatusNA = (status) => !status || !status.value || status.value.trim() === '';
+    const dimmedRowStyle = { opacity: '0.5' };
+
     const onPolicyChange = (e) => {
         setPolicyIds(e.target.value);
     }
@@ -875,7 +963,7 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
                                         </TableRow>
                                         {/* Table rows */}
 
-                                        <TableRow>
+                                        <TableRow xcss={isStatusNA(selectedJiraFixedStatus) ? dimmedRowStyle : undefined}>
 
                                             <TableCell>Fixed</TableCell>
                                             <TableInputCell>
@@ -901,11 +989,11 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
                                                     value={selectedJiraFixedResolution || ''}
                                                     defaultValue={selectedJiraFixedResolution}
                                                     onChange={handleJiraFixedResolutionChange}
-                                                    isDisabled={isSubmitting}
+                                                    isDisabled={isSubmitting || isStatusNA(selectedJiraFixedStatus)}
                                                 ></Select>
                                             </TableInputCell>
                                         </TableRow>
-                                        <TableRow>
+                                        <TableRow xcss={isStatusNA(selectedJiraNoiseStatus) ? dimmedRowStyle : undefined}>
                                             <TableCell>Noise</TableCell>
                                             <TableInputCell>
                                                 <Select
@@ -931,11 +1019,11 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
                                                     value={selectedJiraNoiseResolution}
                                                     defaultValue={selectedJiraNoiseResolution}
                                                     onChange={handleJiraNoiseResolutionChange}
-                                                    isDisabled={isSubmitting}
+                                                    isDisabled={isSubmitting || isStatusNA(selectedJiraNoiseStatus)}
                                                 ></Select>
                                             </TableInputCell>
                                         </TableRow>
-                                        <TableRow>
+                                        <TableRow xcss={isStatusNA(selectedJiraInProgressStatus) ? dimmedRowStyle : undefined}>
                                             <TableCell>In progress</TableCell>
                                             <TableInputCell>
                                                 <Select
@@ -958,11 +1046,11 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
                                                     value={selectedJiraInProgressResolution || ''}
                                                     defaultValue={selectedJiraInProgressResolution}
                                                     onChange={handleJiraInProgressResolutionChange}
-                                                    isDisabled={isSubmitting}
+                                                    isDisabled={isSubmitting || isStatusNA(selectedJiraInProgressStatus)}
                                                 ></Select>
                                             </TableInputCell>
                                         </TableRow>
-                                        <TableRow>
+                                        <TableRow xcss={isStatusNA(selectedJiraReopenedStatus) ? dimmedRowStyle : undefined}>
                                             <TableCell>Reopened</TableCell>
                                             <TableInputCell>
                                                 <Select
@@ -984,7 +1072,55 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
                                                     value={selectedJiraReopenedResolution || ''}
                                                     defaultValue={selectedJiraReopenedResolution}
                                                     onChange={handleJiraReopenedResolutionChange}
+                                                    isDisabled={isSubmitting || isStatusNA(selectedJiraReopenedStatus)}
+                                                ></Select>
+                                            </TableInputCell>
+                                        </TableRow>
+                                        <TableRow xcss={isStatusNA(selectedJiraOpenStatus) ? dimmedRowStyle : undefined}>
+                                            <TableCell>Open</TableCell>
+                                            <TableInputCell>
+                                                <Select
+                                                    appearance='default'
+                                                    options={jiraStatus}
+                                                    value={selectedJiraOpenStatus}
+                                                    defaultValue={selectedJiraOpenStatus}
+                                                    onChange={handleJiraOpenStatusChange}
                                                     isDisabled={isSubmitting}
+                                                    isLoading={statusesLoading}
+                                                ></Select>
+                                            </TableInputCell>
+                                            <TableInputCell>
+                                                <Select
+                                                    appearance='default'
+                                                    options={jiraResolution}
+                                                    value={selectedJiraOpenResolution || ''}
+                                                    defaultValue={selectedJiraOpenResolution}
+                                                    onChange={handleJiraOpenResolutionChange}
+                                                    isDisabled={isSubmitting || isStatusNA(selectedJiraOpenStatus)}
+                                                ></Select>
+                                            </TableInputCell>
+                                        </TableRow>
+                                        <TableRow xcss={isStatusNA(selectedJiraPassedStatus) ? dimmedRowStyle : undefined}>
+                                            <TableCell>Passed</TableCell>
+                                            <TableInputCell>
+                                                <Select
+                                                    appearance='default'
+                                                    options={jiraStatus}
+                                                    value={selectedJiraPassedStatus}
+                                                    defaultValue={selectedJiraPassedStatus}
+                                                    onChange={handleJiraPassedStatusChange}
+                                                    isDisabled={isSubmitting}
+                                                    isLoading={statusesLoading}
+                                                ></Select>
+                                            </TableInputCell>
+                                            <TableInputCell>
+                                                <Select
+                                                    appearance='default'
+                                                    options={jiraResolution}
+                                                    value={selectedJiraPassedResolution || ''}
+                                                    defaultValue={selectedJiraPassedResolution}
+                                                    onChange={handleJiraPassedResolutionChange}
+                                                    isDisabled={isSubmitting || isStatusNA(selectedJiraPassedStatus)}
                                                 ></Select>
                                             </TableInputCell>
                                         </TableRow>
@@ -1118,7 +1254,7 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
                             )}
                         </>
                         <FormFooter align='start'>
-                            <Button appearance="primary" isDisabled={isSubmitting} type="submit">
+                            <Button appearance="primary" isDisabled={isSubmitting || !!duplicateMappingError} type="submit">
                                 Save configuration {isSubmitting ? <Spinner appearance='inherit' size={'medium'} /> : ''}
                             </Button>
                         </FormFooter>
