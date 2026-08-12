@@ -28,8 +28,9 @@
     "tar": "7.5.19",
     "react": "18.3.1",
     "form-data": "4.0.6",
-    "fast-uri": "3.1.4",
+    "fast-uri": "3.1.5",
     "linkify-it": "5.0.2",
-    "brace-expansion": "5.0.8"
+    "brace-expansion": "5.0.9",
+    "browserslist": "4.28.7"
   }
 }
