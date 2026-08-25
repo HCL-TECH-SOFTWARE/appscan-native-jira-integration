@@ -897,7 +897,7 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
                                 <Box>
                                     <Checkbox
                                         value="bidirectional"
-                                        label="Jira work items marked as done are automatically fixed in AppScan"
+                                        label="Jira items marked as Done will automatically update to Fixed in AppScan"
                                         isChecked={isChecked}
                                         onChange={() => {
                                             setIsChecked((prev) => !prev);
@@ -917,7 +917,7 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
                                                 </ModalHeader>
                                                 <ModalBody>
                                                     <Text>
-                                                        Selecting this will enable automatic status management. Jira work items marked as done are automatically fixed in AppScan.
+                                                        Selecting this will enable automatic status management. Jira items marked as Done will automatically update to Fixed in AppScan.
                                                     </Text>
                                                 </ModalBody>
                                                 <ModalFooter>
@@ -945,7 +945,7 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
                                             <Text>Custom status mapping</Text>
                                         </Inline>
                                         <HelperMessage>
-                                            When off, only "Done" in Jira maps to "Fixed" in AppScan. Turn on to define your own mappings below.
+                                            When the toggle is off, AppScan status Fixed maps to Done in Jira.
                                         </HelperMessage>
                                     </Box>
                                 ) /* isChecked */}
