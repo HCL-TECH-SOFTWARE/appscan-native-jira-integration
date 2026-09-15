@@ -222,6 +222,15 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
         fetchStatusesByIssue();
     }, [selectedIssueType])
 
+    // When custom mapping is off, default Fixed status to "Done" (if available) once statuses load
+    useEffect(() => {
+        if (!isManual && isChecked && jiraStatus.length > 0) {
+            const doneStatus = jiraStatus.find(s => s.label === 'Done');
+            const naStatus = { label: 'N/A', value: '' };
+            setSelectedJiraFixedStatus(doneStatus || naStatus);
+        }
+    }, [jiraStatus, isManual, isChecked])
+
     const updateImportConfiguration = async (applicationOptionsdata,priorityOptionsData) => {
 
         const config = await invoke('storage', { storageKey: storageKeys.importConfiguration, type: "GET" });
@@ -266,6 +275,22 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
             setPolicyIds(config.policyIds);
             setIsChecked(config.biDirectionalEnabled);
             setIsManual(config.manualMappingEnabled);
+            // When custom mapping is off, ensure defaults: Fixed -> Done/N/A, all others -> N/A/N/A
+            if (!config.manualMappingEnabled && config.biDirectionalEnabled) {
+                const naStatus = { label: 'N/A', value: '' };
+                const naResolution = { label: 'N/A', value: '' };
+                setSelectedJiraFixedResolution(naResolution);
+                setSelectedJiraNoiseStatus(naStatus);
+                setSelectedJiraNoiseResolution(naResolution);
+                setSelectedJiraInProgressStatus(naStatus);
+                setSelectedJiraInProgressResolution(naResolution);
+                setSelectedJiraReopenedStatus(naStatus);
+                setSelectedJiraReopenedResolution(naResolution);
+                setSelectedJiraOpenStatus(naStatus);
+                setSelectedJiraOpenResolution(naResolution);
+                setSelectedJiraPassedStatus(naStatus);
+                setSelectedJiraPassedResolution(naResolution);
+            }
         }
     }
 
@@ -939,7 +964,29 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
                                                 id="custom-status-mapping"
                                                 isChecked={isManual}
                                                 onChange={() => {
-                                                    setIsManual((prev) => !prev);
+                                                    setIsManual((prev) => {
+                                                        const next = !prev;
+                                                        if (!next) {
+                                                            // When turning off custom mapping, reset all to N/A except Fixed -> Done
+                                                            const naStatus = { label: 'N/A', value: '' };
+                                                            const naResolution = { label: 'N/A', value: '' };
+                                                            const doneStatus = jiraStatus.find(s => s.label === 'Done');
+                                                            setSelectedJiraFixedStatus(doneStatus || naStatus);
+                                                            setSelectedJiraFixedResolution(naResolution);
+                                                            setSelectedJiraNoiseStatus(naStatus);
+                                                            setSelectedJiraNoiseResolution(naResolution);
+                                                            setSelectedJiraInProgressStatus(naStatus);
+                                                            setSelectedJiraInProgressResolution(naResolution);
+                                                            setSelectedJiraReopenedStatus(naStatus);
+                                                            setSelectedJiraReopenedResolution(naResolution);
+                                                            setSelectedJiraOpenStatus(naStatus);
+                                                            setSelectedJiraOpenResolution(naResolution);
+                                                            setSelectedJiraPassedStatus(naStatus);
+                                                            setSelectedJiraPassedResolution(naResolution);
+                                                            setDuplicateMappingError('');
+                                                        }
+                                                        return next;
+                                                    });
                                                 }}
                                             />
                                             <Text>Custom status mapping</Text>
@@ -954,7 +1001,7 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
                                 {/* Resolved has Fixed */}
                                 {/* Open, In progress, (Close has Noise Fixed Passed)  */}
                                 {/* <Table headers={headers} rows={rows} /> */}
-                                {isManual && isChecked && (<Stack xcss={{ paddingTop: 'space.200', paddingBottom: 'space.100' }}>
+                                {isChecked && (<Stack xcss={{ paddingTop: 'space.200', paddingBottom: 'space.100' }}>
                                         {/* Table headers */}
                                         <TableRow>
                                             <TableHeader ><Text><Strong>AppScan status</Strong></Text></TableHeader>
@@ -973,7 +1020,7 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
                                                     options={jiraStatus}
                                                     value={selectedJiraFixedStatus}
                                                     onChange={handleJiraFixedStatusChange}
-                                                    isDisabled={isSubmitting}
+                                                    isDisabled={isSubmitting || !isManual}
                                                     isLoading={statusesLoading}
                                                 ></Select>
                                             </TableInputCell>
@@ -985,7 +1032,7 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
                                                     value={selectedJiraFixedResolution || ''}
                                                     defaultValue={selectedJiraFixedResolution}
                                                     onChange={handleJiraFixedResolutionChange}
-                                                    isDisabled={isSubmitting || isStatusNA(selectedJiraFixedStatus)}
+                                                    isDisabled={isSubmitting || !isManual || isStatusNA(selectedJiraFixedStatus)}
                                                 ></Select>
                                             </TableInputCell>
                                         </TableRow>
@@ -999,7 +1046,7 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
                                                     value={selectedJiraNoiseStatus}
                                                     defaultValue={selectedJiraNoiseStatus}
                                                     onChange={handleJiraNoiseStatusChange}
-                                                    isDisabled={isSubmitting}
+                                                    isDisabled={isSubmitting || !isManual}
                                                     isLoading={statusesLoading}
                                                 ></Select>
                                             </TableInputCell>
@@ -1011,7 +1058,7 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
                                                     value={selectedJiraNoiseResolution}
                                                     defaultValue={selectedJiraNoiseResolution}
                                                     onChange={handleJiraNoiseResolutionChange}
-                                                    isDisabled={isSubmitting || isStatusNA(selectedJiraNoiseStatus)}
+                                                    isDisabled={isSubmitting || !isManual || isStatusNA(selectedJiraNoiseStatus)}
                                                 ></Select>
                                             </TableInputCell>
                                         </TableRow>
@@ -1025,7 +1072,7 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
                                                     value={selectedJiraInProgressStatus}
                                                     defaultValue={selectedJiraInProgressStatus}
                                                     onChange={handleJiraInProgressStatusChange}
-                                                    isDisabled={isSubmitting}
+                                                    isDisabled={isSubmitting || !isManual}
                                                     isLoading={statusesLoading}
                                                 ></Select>
                                             </TableInputCell>
@@ -1036,7 +1083,7 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
                                                     value={selectedJiraInProgressResolution || ''}
                                                     defaultValue={selectedJiraInProgressResolution}
                                                     onChange={handleJiraInProgressResolutionChange}
-                                                    isDisabled={isSubmitting || isStatusNA(selectedJiraInProgressStatus)}
+                                                    isDisabled={isSubmitting || !isManual || isStatusNA(selectedJiraInProgressStatus)}
                                                 ></Select>
                                             </TableInputCell>
                                         </TableRow>
@@ -1050,7 +1097,7 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
                                                     value={selectedJiraReopenedStatus}
                                                     defaultValue={selectedJiraReopenedStatus}
                                                     onChange={handleJiraReopenedStatusChange}
-                                                    isDisabled={isSubmitting}
+                                                    isDisabled={isSubmitting || !isManual}
                                                 ></Select>
                                             </TableInputCell>
                                             <TableInputCell>
@@ -1060,7 +1107,7 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
                                                     value={selectedJiraReopenedResolution || ''}
                                                     defaultValue={selectedJiraReopenedResolution}
                                                     onChange={handleJiraReopenedResolutionChange}
-                                                    isDisabled={isSubmitting || isStatusNA(selectedJiraReopenedStatus)}
+                                                    isDisabled={isSubmitting || !isManual || isStatusNA(selectedJiraReopenedStatus)}
                                                 ></Select>
                                             </TableInputCell>
                                         </TableRow>
@@ -1073,7 +1120,7 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
                                                     value={selectedJiraOpenStatus}
                                                     defaultValue={selectedJiraOpenStatus}
                                                     onChange={handleJiraOpenStatusChange}
-                                                    isDisabled={isSubmitting}
+                                                    isDisabled={isSubmitting || !isManual}
                                                     isLoading={statusesLoading}
                                                 ></Select>
                                             </TableInputCell>
@@ -1084,7 +1131,7 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
                                                     value={selectedJiraOpenResolution || ''}
                                                     defaultValue={selectedJiraOpenResolution}
                                                     onChange={handleJiraOpenResolutionChange}
-                                                    isDisabled={isSubmitting || isStatusNA(selectedJiraOpenStatus)}
+                                                    isDisabled={isSubmitting || !isManual || isStatusNA(selectedJiraOpenStatus)}
                                                 ></Select>
                                             </TableInputCell>
                                         </TableRow>
@@ -1097,7 +1144,7 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
                                                     value={selectedJiraPassedStatus}
                                                     defaultValue={selectedJiraPassedStatus}
                                                     onChange={handleJiraPassedStatusChange}
-                                                    isDisabled={isSubmitting}
+                                                    isDisabled={isSubmitting || !isManual}
                                                     isLoading={statusesLoading}
                                                 ></Select>
                                             </TableInputCell>
@@ -1108,7 +1155,7 @@ const ImportConfiguration = ({ refreshConfigFlag, isCredsExpired }) => {
                                                     value={selectedJiraPassedResolution || ''}
                                                     defaultValue={selectedJiraPassedResolution}
                                                     onChange={handleJiraPassedResolutionChange}
-                                                    isDisabled={isSubmitting || isStatusNA(selectedJiraPassedStatus)}
+                                                    isDisabled={isSubmitting || !isManual || isStatusNA(selectedJiraPassedStatus)}
                                                 ></Select>
                                             </TableInputCell>
                                         </TableRow>
