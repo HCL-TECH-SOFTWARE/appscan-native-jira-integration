@@ -31,7 +31,7 @@ const resolver = new Resolver();
 
 resolver.define("timer-queue-consumer", async ({ payload, context }) => {
 
-    console.log('timer queue called', payload, context);
+    console.log('timer queue called', payload);
     if (payload.diffTime > 60 * 60) {
         console.log('timer is more than an hour, so closing the timer now')
     }
@@ -42,7 +42,7 @@ resolver.define("timer-queue-consumer", async ({ payload, context }) => {
         await timerQueue.push({ diffTime: 0, maxIssues: payload.maxIssues }, { delayInSeconds: payload.diffTime });
     }
     else if (payload.diffTime <= 30) {
-        console.log('job running now...')
+        console.log('Starting the import process');
         await importIssues(payload.maxIssues);
     }
 });
@@ -66,14 +66,14 @@ const fetchJiraBaseUrl = async () => {
 const importIssues = async (maxIssues) => {
     const formData = await storage.get(storageKeys.importConfiguration);
     if (!formData || Object.keys(formData).length == 0) {
-        console.error('Import configuration is not set, please provide the configuration!');
+        console.error('Import configuration is not set, please provide the configuration!', 'from timer queue consumer');
         return;
     }
 
     const credentials = await storage.getSecret(storageKeys.credentials);
 
     if (!credentials || Object.keys(credentials).length == 0) {
-        console.error('Credentials not found. Please save credentials from login tab.');
+        console.error('Credentials not found. Please save credentials from login tab.', 'from timer queue consumer');
         return;
     }
 
@@ -94,7 +94,7 @@ const importIssues = async (maxIssues) => {
 
 
     if (!authResponse.ok) {
-        console.error('Invalid credentials configured');
+        console.error('Invalid credentials configured', 'from timer queue consumer');
         return;
     }
 
@@ -108,7 +108,7 @@ const importIssues = async (maxIssues) => {
     let arrayOfValues = formData.applicationId.map(obj => obj.value);
 
     if (arrayOfValues.length == 0) {
-        console.error('No applications found, please check configuration!');
+        console.error('No applications found, please check configuration!', 'from timer queue consumer');
         return;
     }
 
@@ -210,7 +210,7 @@ const importIssues = async (maxIssues) => {
     }
 
     if (finalAppPayload.length) {
-        console.log(`found ${finalAppPayload.length} apps`, { importId: importId })
+        console.log(`found ${finalAppPayload.length} apps`, { importId: importId }, 'from timer queue consumer')
 
         let delayCount = 0;
         let batchId = 1;
@@ -226,7 +226,7 @@ const importIssues = async (maxIssues) => {
                     chunk.maxIssues = importBatchSize;
                     maxIssueSupport = maxIssueSupport - importBatchSize;
                 }
-                console.log(`pushing to appQueue from auto import maxIssues:${maxIssues}, maxIssueSupport:${maxIssueSupport}, delay:${delayCount}`)
+                console.log(`pushing to appQueue from auto import maxIssues:${maxIssues}, maxIssueSupport:${maxIssueSupport}, delay:${delayCount}`, 'from timer queue consumer');
                 chunk.delay = delayCount - maxAllowedQueueDelayInSeconds;
                 chunk.batchId = batchId;
                 await appQueue.push(chunk, { delayInSeconds: delayCount > maxAllowedQueueDelayInSeconds ? maxAllowedQueueDelayInSeconds : delayCount });
@@ -237,7 +237,7 @@ const importIssues = async (maxIssues) => {
         }
 
         const historyDelayCount = delayCount;
-        console.log(`History will be called after ${(historyDelayCount) / 60} minutes = ${historyDelayCount} secs`);
+        console.log(`History will be called after ${(historyDelayCount) / 60} minutes = ${historyDelayCount} secs`, 'from timer queue consumer');
         await historyQueue.push({ importId: importId, deleteOnly: false, importType: importType.auto, delay: historyDelayCount - maxAllowedQueueDelayInSeconds }, { delayInSeconds: historyDelayCount > maxAllowedQueueDelayInSeconds ? maxAllowedQueueDelayInSeconds : historyDelayCount });
     }
 }

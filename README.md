@@ -9,7 +9,7 @@ Before you begin, ensure you have the following:
 
 * A Jira Cloud instance with administrative privileges.
 
-* Node.js version v22.14.0 or later, and npm (or yarn) are installed.
+* Node.js v22.14.0 or later with npm v11.15.0 or later installed.
 
 * The Forge CLI installed:  
   * npm install \-g @forge/cli  
@@ -151,7 +151,7 @@ The Forge CLI generates an app id in the manifest.yml file. Be sure to **note th
 
    1. Navigate to the plugin's root directory in your terminal and install the required dependencies:
    ```
-   npm install  
+   npm ci --ignore-scripts  
    ```
 10. **Build and Deploy the Plugin:**
 

@@ -24,7 +24,7 @@ import { storageKeys } from '../appConstants';
  * it will run every hour and check from the auto import config if it should execute the job
  */
 export const trigger = async function webtriggerhandler() {
-    console.log('trigger called');
+    console.log('auto import trigger called');
     const autoImportConfig = await storage.get(storageKeys.autoImportConfig);
     console.log('auto import config', autoImportConfig);
 
@@ -42,7 +42,7 @@ export const trigger = async function webtriggerhandler() {
             diffTime = (24 * 60) - (currentTimeInMinutes - configTimeInMinutes);
         }
 
-        console.log('diffTime', diffTime);
+
         let isJobRun = diffTime < 60 && diffTime >= 0;
 
         if (frequency == 'daily') {
@@ -78,7 +78,7 @@ export const trigger = async function webtriggerhandler() {
         }
     }
     else {
-        console.log('No jobs scheduled')
+        console.log('No auto import jobs scheduled')
     }
 
 

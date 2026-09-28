@@ -30,16 +30,16 @@ const resolver = new Resolver();
 
 resolver.define("history-queue-consumer", async ({ payload, context }) => {
 
-    console.log('history queue called', payload, context, { importId: payload.importId });
+    console.log('history queue called', payload, { importId: payload.importId });
     const startTime = new Date().getTime();
 
     if (payload.delay > maxAllowedQueueDelayInSeconds) {
-        console.log('history queue delayed', payload, context, { importId: payload.importId });
+        console.log('history queue delayed', payload, { importId: payload.importId });
         await historyQueue.push({ importId: payload.importId, deleteOnly: false, importType: payload.importType, updateHistoryCalledFlag: payload.updateHistoryCalledFlag, delay: payload.delay - maxAllowedQueueDelayInSeconds }, { delayInSeconds: maxAllowedQueueDelayInSeconds });
         return;
     }
     else if (payload.delay > 0) {
-        console.log('history queue delayed', payload, context, { importId: payload.importId });
+        console.log('history queue delayed', payload, { importId: payload.importId });
         await historyQueue.push({ importId: payload.importId, deleteOnly: false, importType: payload.importType, updateHistoryCalledFlag: payload.updateHistoryCalledFlag, delay: payload.delay - maxAllowedQueueDelayInSeconds }, { delayInSeconds: payload.delay });
         return;
     }

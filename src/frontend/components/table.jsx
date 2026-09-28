@@ -73,11 +73,13 @@ export const TableHeader = ({ children }) => {
     );
 };
 
-export const TableRow = ({ children }) => {
+export const TableRow = ({ children, xcss }) => {
     return (
-        <Inline>
-            {children}
-        </Inline>
+        <Box xcss={xcss}>
+            <Inline>
+                {children}
+            </Inline>
+        </Box>
     );
 };
 
