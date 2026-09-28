@@ -1,5 +1,12 @@
 Release Summary
 =========
+1.2.2 (Sep, 2026)
+------
+* Added Jira-to-AppScan custom status mapping
+* Improved import configuration UI/UX
+* Enhanced logging across queue consumers and triggers for better diagnostics and cost optimization
+* Bug fixes
+------
 1.2.1 (Sep, 2025)
 ------
 * Added cancel import functionality for one time imports.
