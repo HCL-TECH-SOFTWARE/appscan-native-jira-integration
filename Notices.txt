@@ -2,7 +2,7 @@
 Notices and Information
 -----------------------
 ------------------------------
-HCL AppScan Native Jira v1.2.2
+HCL AppScan Native Jira v1.2.3
 ------------------------------
 
 ======
