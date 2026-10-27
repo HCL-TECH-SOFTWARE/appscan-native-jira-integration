@@ -9,11 +9,11 @@ Before you begin, ensure you have the following:
 
 * A Jira Cloud instance with administrative privileges.
 
-* Node.js v22.14.0 or later with npm v11.15.0 or later installed.
+* Node.js v22.23.4 or later with npm v10.9.9 or later installed.
 
-* The Forge CLI installed:  
-  * npm install \-g @forge/cli  
-    The Forge CLI is the command-line interface for developing Forge apps, which allows you to create, build, and deploy Jira apps.
+* The latest version of the Forge CLI installed:  
+  * npm install \-g @forge/cli@latest  
+    The Forge CLI is the command-line interface for developing Forge apps, which allows you to create, build, and deploy Jira apps. Always use the latest version to ensure compatibility with current Node.js runtimes and security patches.
 
 * A server with AppScan 360° (version 1.5 and later) installed.
 
